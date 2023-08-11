@@ -1,69 +1,105 @@
-/* While this template provides a good starting point for using Wear Compose, you can always
- * take a look at https://github.com/android/wear-os-samples/tree/main/ComposeStarter and
- * https://github.com/android/wear-os-samples/tree/main/ComposeAdvanced to find the most up to date
- * changes to the libraries and their usages.
- */
-
 package net.osdn.ja.gokigen.wearos.calendar.presentation
 
+import android.Manifest
+import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Log
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Devices
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.wear.compose.material.MaterialTheme
-import androidx.wear.compose.material.Text
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import net.osdn.ja.gokigen.wearos.calendar.R
-import net.osdn.ja.gokigen.wearos.calendar.presentation.theme.MonthlyCalendarTheme
+import net.osdn.ja.gokigen.wearos.calendar.presentation.ui.ViewRoot
+import java.io.File
 
-class MainActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
+class MainActivity : ComponentActivity()
+{
+    private lateinit var rootComponent : ViewRoot
+    // private val storageDao = DbSingleton.db.storageDao()
+    override fun onCreate(savedInstanceState: Bundle?)
+    {
+        try
+        {
+            ///////// SHOW SPLASH SCREEN : call before super.onCreate() /////////
+            installSplashScreen()
+        }
+        catch (e: Exception)
+        {
+            e.printStackTrace()
+        }
         super.onCreate(savedInstanceState)
-        setContent {
-            WearApp("Android")
+
+        try
+        {
+            if (!allPermissionsGranted())
+            {
+                val requestPermission = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {
+                    if(!allPermissionsGranted())
+                    {
+                        Toast.makeText(this, getString(R.string.permission_not_granted), Toast.LENGTH_SHORT).show()
+                        finish()
+                    }
+                }
+                requestPermission.launch(REQUIRED_PERMISSIONS)
+            }
+            else
+            {
+                setupEnvironments()
+            }
+            rootComponent = ViewRoot(applicationContext)
+            setContent {
+                rootComponent.Content()
+            }
+        }
+        catch (ex: Exception)
+        {
+            ex.printStackTrace()
         }
     }
-}
 
-@Composable
-fun WearApp(greetingName: String) {
-    MonthlyCalendarTheme {
-        /* If you have enough items in your list, use [ScalingLazyColumn] which is an optimized
-         * version of LazyColumn for wear devices with some added features. For more information,
-         * see d.android.com/wear/compose.
-         */
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(MaterialTheme.colors.background),
-            verticalArrangement = Arrangement.Center
-        ) {
-            Greeting(greetingName = greetingName)
+    private fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {
+        ContextCompat.checkSelfPermission(baseContext, it) == PackageManager.PERMISSION_GRANTED
+    }
+
+    private fun setupEnvironments()
+    {
+        val thread = Thread {
+            try
+            {
+                val subDirectory = File(filesDir, CACHE_DIR)
+                if (!subDirectory.exists())
+                {
+                    if (!subDirectory.mkdirs())
+                    {
+                        Log.v(TAG, "----- Sub Directory $CACHE_DIR create failure...")
+                    }
+                }
+            }
+            catch (e: Exception)
+            {
+                e.printStackTrace()
+            }
+        }
+        try
+        {
+            thread.start()
+        }
+        catch (e: Exception)
+        {
+            e.printStackTrace()
         }
     }
-}
 
-@Composable
-fun Greeting(greetingName: String) {
-    Text(
-        modifier = Modifier.fillMaxWidth(),
-        textAlign = TextAlign.Center,
-        color = MaterialTheme.colors.primary,
-        text = stringResource(R.string.hello_world, greetingName)
-    )
-}
-
-@Preview(device = Devices.WEAR_OS_SMALL_ROUND, showSystemUi = true)
-@Composable
-fun DefaultPreview() {
-    WearApp("Preview Android")
+    companion object
+    {
+        private val TAG = MainActivity::class.java.simpleName
+        private const val CACHE_DIR : String = "/caches/"
+        private val REQUIRED_PERMISSIONS = arrayOf(
+            Manifest.permission.VIBRATE,
+            Manifest.permission.WAKE_LOCK,
+        )
+        //private const val isDebugLog = true
+    }
 }

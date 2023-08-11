@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">月間カレンダー</string>
+    <string name="permission_not_granted">必要な権限が有効ではありません。有効にしてください。</string>
+
+    <string name="hello_world">こんにちは！\nHello, %1$s!</string>
+    <string name="tile_label">(メインタイトル)</string>
+    <string name="complication_label">(サンプル)</string>
+
+</resources>
