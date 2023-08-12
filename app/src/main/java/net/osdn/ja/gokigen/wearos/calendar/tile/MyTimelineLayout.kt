@@ -5,6 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.wear.protolayout.ActionBuilders
 import androidx.wear.protolayout.ColorBuilders
 import androidx.wear.protolayout.DeviceParametersBuilders
 import androidx.wear.protolayout.LayoutElementBuilders
@@ -64,13 +65,10 @@ class MyTimelineLayout
         {
             for (dayOfWeek in 1 .. 7)
             {
-                if ((targetDate == calendar[Calendar.DATE])&&(targetMonth - 1 == calendar[Calendar.MONTH]))
-                {
-                    dayString += "[%02d]".format(calendar[Calendar.DATE])
-                }
-                else
-                {
-                    dayString += " %02d ".format(calendar[Calendar.DATE])
+                dayString += if ((targetDate == calendar[Calendar.DATE])&&(targetMonth - 1 == calendar[Calendar.MONTH])) {
+                    "[%02d]".format(calendar[Calendar.DATE])
+                } else {
+                    " %02d ".format(calendar[Calendar.DATE])
                 }
                 calendar.add(Calendar.DATE, 1)
             }
@@ -108,7 +106,13 @@ class MyTimelineLayout
                 "%04d-%02d".format(year, month)
             }
         val deviceParameters = requestParams.deviceConfiguration
-        val clickable = ModifiersBuilders.Clickable.Builder().build()
+        val clickable =
+            launchActivityClickable("calendar",
+                ActionBuilders.AndroidActivity.Builder()
+                    .setPackageName("net.osdn.ja.gokigen.wearos.calendar")
+                    .setClassName("net.osdn.ja.gokigen.wearos.calendar.presentation.MainActivity")
+                    .build()
+            )
         val timeline =
             PrimaryLayout.Builder(deviceParameters)
                 .setPrimaryLabelTextContent(
@@ -155,6 +159,18 @@ private fun tileLayout0(context: Context): LayoutElementBuilders.LayoutElement
             .build()
     return (timeline)
 }
+
+internal fun launchActivityClickable(
+    clickableId: String,
+    androidActivity: ActionBuilders.AndroidActivity
+) = ModifiersBuilders.Clickable.Builder()
+    .setId(clickableId)
+    .setOnClick(
+        ActionBuilders.LaunchAction.Builder()
+            .setAndroidActivity(androidActivity)
+            .build()
+    )
+    .build()
 
 @Preview(
     device = Devices.WEAR_OS_SMALL_ROUND,
