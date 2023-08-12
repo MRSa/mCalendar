@@ -15,7 +15,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
@@ -50,32 +50,18 @@ import java.util.Locale
 @Composable
 fun MonthlyCalendar(initialYear: Int, initialMonth: Int, initialDate: Int)
 {
-    var year by remember { mutableStateOf(initialYear) }
-    var month by remember { mutableStateOf(initialMonth) }
-    var date by remember { mutableStateOf(initialDate) }
+    var year by remember { mutableIntStateOf(initialYear) }
+    var month by remember { mutableIntStateOf(initialMonth) }
+    var date by remember { mutableIntStateOf(initialDate) }
 
     MonthlyCalendarTheme {
         val focusRequester = remember { FocusRequester() }
         val coroutineScope = rememberCoroutineScope()
         val scrollState = rememberScrollState()
+        val yearMonthSize = 16.sp
+        val dateSize = 12.sp
 
-        var showYear = year
-        var showMonth = month
-        val showTitleYearMonth =
-            if (checkIsShowNextMonth(year, month, date))
-            {
-                // 翌月の表示にする
-                val calendar: Calendar = Calendar.getInstance()
-                calendar.set(year, month, 1)
-                showYear = calendar[Calendar.YEAR]
-                showMonth = calendar[Calendar.MONTH] + 1
-                "%04d-%02d".format(showYear, showMonth)
-            }
-            else
-            {
-                // 当月を表示する
-                "%04d-%02d".format(showYear, showMonth)
-            }
+        val showTitleYearMonth =  "%04d-%02d".format(year, month)
 
         Scaffold(
             timeText = {
@@ -102,7 +88,7 @@ fun MonthlyCalendar(initialYear: Int, initialMonth: Int, initialDate: Int)
                         true
                     }
                     .verticalScroll(scrollState)
-                    .padding(horizontal = 16.dp, vertical = 20.dp)
+                    .padding(horizontal = 20.dp, vertical = 20.dp)
                     .focusRequester(focusRequester)
                     .focusable(),
                 verticalArrangement = Arrangement.Center,
@@ -115,21 +101,24 @@ fun MonthlyCalendar(initialYear: Int, initialMonth: Int, initialDate: Int)
                         color = wearColorPalette.primary,
                         fontWeight = FontWeight.Bold,
                         textAlign = TextAlign.Center,
-                        fontSize = 16.sp,
+                        fontSize = yearMonthSize,
                     )
                 }
-                Column() {
+                Column {
                     Text(
                         text = " SU MO TU WE TH FR SA ",
                         //color = defaultColorPalette.primary,
                         fontWeight = FontWeight.Normal,
                         color = wearColorPalette.secondary,
                         textAlign = TextAlign.Center,
-                        fontSize = 13.sp,
+                        fontSize = dateSize,
                     )
 
                     val calendar: Calendar = Calendar.getInstance()
-                    calendar.set(showYear, (showMonth - 1), 1)
+                    val currentYear = calendar[Calendar.YEAR]
+                    val currentMonth = calendar[Calendar.MONTH] + 1
+                    val currentDate = calendar[Calendar.DATE]
+                    calendar.set(year, (month - 1), 1)
                     calendar.add(Calendar.DATE, getDayOfWeekIndex(calendar) * (-1))
 
                     for (index in 1..6)
@@ -137,13 +126,10 @@ fun MonthlyCalendar(initialYear: Int, initialMonth: Int, initialDate: Int)
                         var dayString = ""
                         for (dayOfWeek in 1 .. 7)
                         {
-                            if ((date == calendar[Calendar.DATE])&&(month - 1 == calendar[Calendar.MONTH]))
-                            {
-                                dayString += "[%02d]".format(calendar[Calendar.DATE])
-                            }
-                            else
-                            {
-                                dayString += " %02d ".format(calendar[Calendar.DATE])
+                            dayString += if ((currentDate == calendar[Calendar.DATE])&&(currentMonth - 1 == calendar[Calendar.MONTH])&&(currentYear == calendar[Calendar.YEAR])) {
+                                "[%02d]".format(calendar[Calendar.DATE])
+                            } else {
+                                " %02d ".format(calendar[Calendar.DATE])
                             }
                             calendar.add(Calendar.DATE, 1)
                         }
@@ -152,7 +138,7 @@ fun MonthlyCalendar(initialYear: Int, initialMonth: Int, initialDate: Int)
                             //color = defaultColorPalette.primary,
                             fontWeight = FontWeight.Normal,
                             textAlign = TextAlign.Center,
-                            fontSize = 13.sp,
+                            fontSize = dateSize,
                         )
                     }
                 }
@@ -163,10 +149,12 @@ fun MonthlyCalendar(initialYear: Int, initialMonth: Int, initialDate: Int)
                         onClick = {
                             try
                             {
-                                Log.d("Button(Previous)", "onClick")
                                 val calendar = Calendar.getInstance()
-                                calendar.set(year, month - 2, date)
+                                calendar.set(year, month - 1, date)
+                                calendar.add(Calendar.MONTH, -1)
                                 month = calendar[Calendar.MONTH] + 1
+                                year = calendar[Calendar.YEAR]
+                                Log.d("Button(Previous)", "onClick $year-$month-$date")
                             }
                             catch (e: Exception)
                             {
@@ -188,11 +176,11 @@ fun MonthlyCalendar(initialYear: Int, initialMonth: Int, initialDate: Int)
                         onClick = {
                             try
                             {
-                                Log.d("Button(Today)", "onClick")
                                 val calendar = Calendar.getInstance()
                                 year = calendar[Calendar.YEAR]
                                 month = calendar[Calendar.MONTH] + 1
                                 date = calendar[Calendar.DATE]
+                                Log.d("Button(Today)", "onClick  $year-$month-$date")
                             }
                             catch (e: Exception)
                             {
@@ -214,10 +202,12 @@ fun MonthlyCalendar(initialYear: Int, initialMonth: Int, initialDate: Int)
                         onClick = {
                             try
                             {
-                                Log.d("Button(Next)", "onClick")
                                 val calendar = Calendar.getInstance()
-                                calendar.set(year, month, date)
+                                calendar.set(year, month - 1, date)
+                                calendar.add(Calendar.MONTH, 1)
                                 month = calendar[Calendar.MONTH] + 1
+                                year = calendar[Calendar.YEAR]
+                                Log.d("Button(Next)", "onClick  $year-$month-$date")
                             }
                             catch (e: Exception)
                             {
@@ -256,16 +246,6 @@ private fun getDayOfWeekIndex(calendar: Calendar): Int
     }
     return (week)
 }
-
-private fun checkIsShowNextMonth(year: Int, month: Int, checkDay: Int) : Boolean
-{
-    // ”指定された日" から、翌月の開始日を確認
-    val calendar: Calendar = Calendar.getInstance()
-    calendar.set(year, month, 1)
-    calendar.add(Calendar.DATE, getDayOfWeekIndex(calendar) * (-1))
-    return (checkDay >= calendar[Calendar.DATE])
-}
-
 
 @Preview(device = Devices.WEAR_OS_SMALL_ROUND, showSystemUi = true)
 @Composable
