@@ -2,7 +2,6 @@
     <string name="app_name">MonthlyCalendar</string>
     <string name="permission_not_granted">Permissions not granted by the user.</string>
 
+    <string name="tile_label">Monthly Calendar</string>
     <string name="hello_world">Hi,\nHello, %1$s!</string>
-    <string name="tile_label">(Main Title)</string>
-    <string name="complication_label">(Example)</string>
 </resources>

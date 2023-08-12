@@ -24,7 +24,7 @@ class MainTileService: SuspendingTileService()
     {
         val singleTileTimeline = TimelineBuilders.Timeline.Builder().addTimelineEntry(
             TimelineBuilders.TimelineEntry.Builder().setLayout(
-                LayoutElementBuilders.Layout.Builder().setRoot(timelineLayout.getLayout(applicationContext)).build()
+                LayoutElementBuilders.Layout.Builder().setRoot(timelineLayout.getLayout(applicationContext, requestParams)).build()
         ).build())
         return TileBuilders.Tile.Builder().setResourcesVersion(RESOURCES_VERSION)
             .setTileTimeline(singleTileTimeline.build())

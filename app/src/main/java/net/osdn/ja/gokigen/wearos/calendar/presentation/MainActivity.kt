@@ -17,7 +17,6 @@ import java.io.File
 class MainActivity : ComponentActivity()
 {
     private lateinit var rootComponent : ViewRoot
-    // private val storageDao = DbSingleton.db.storageDao()
     override fun onCreate(savedInstanceState: Bundle?)
     {
         try
