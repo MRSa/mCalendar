@@ -76,7 +76,7 @@ fun MonthlyCalendar(initialYear: Int, initialMonth: Int, initialDate: Int)
         val scrollState = rememberScrollState()
         val yearMonthSize = 16.sp
         val dateSize = 13.sp
-
+        val horizontalPadding = 5.dp  // square: 5dp, round: 20dp
         val showTitleYearMonth =  "%04d-%02d".format(year, month)
 
         Scaffold(
@@ -105,7 +105,7 @@ fun MonthlyCalendar(initialYear: Int, initialMonth: Int, initialDate: Int)
                     }
                     .fillMaxWidth()
                     .verticalScroll(scrollState)
-                    .padding(horizontal = 20.dp, vertical = 20.dp)
+                    .padding(horizontal = horizontalPadding, vertical = 20.dp)
                     .focusRequester(focusRequester)
                     .focusable(),
                 verticalArrangement = Arrangement.Center,
