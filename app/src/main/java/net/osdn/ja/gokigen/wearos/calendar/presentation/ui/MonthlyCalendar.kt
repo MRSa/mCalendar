@@ -1,5 +1,8 @@
 package net.osdn.ja.gokigen.wearos.calendar.presentation.ui
 
+import android.os.VibrationEffect
+import android.os.VibrationEffect.DEFAULT_AMPLITUDE
+import android.os.Vibrator
 import android.text.format.DateFormat
 import android.util.Log
 import androidx.compose.foundation.background
@@ -27,6 +30,7 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.rotary.onRotaryScrollEvent
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -35,6 +39,7 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat
 import androidx.wear.compose.material.Button
 import androidx.wear.compose.material.Icon
 import androidx.wear.compose.material.PositionIndicator
@@ -59,6 +64,8 @@ import java.util.Locale
 @Composable
 fun MonthlyCalendar(initialYear: Int, initialMonth: Int, initialDate: Int)
 {
+    val context = LocalContext.current
+    val vibrator = ContextCompat.getSystemService(context, Vibrator::class.java)
     var year by remember { mutableIntStateOf(initialYear) }
     var month by remember { mutableIntStateOf(initialMonth) }
     var date by remember { mutableIntStateOf(initialDate) }
@@ -224,6 +231,7 @@ fun MonthlyCalendar(initialYear: Int, initialMonth: Int, initialDate: Int)
                                 month = calendar[Calendar.MONTH] + 1
                                 year = calendar[Calendar.YEAR]
                                 Log.d("Button(Previous)", "onClick $year-$month-$date")
+                                vibrator?.vibrate(VibrationEffect.createOneShot(25, DEFAULT_AMPLITUDE))
                             }
                             catch (e: Exception)
                             {
@@ -250,6 +258,7 @@ fun MonthlyCalendar(initialYear: Int, initialMonth: Int, initialDate: Int)
                                 month = calendar[Calendar.MONTH] + 1
                                 date = calendar[Calendar.DATE]
                                 Log.d("Button(Today)", "onClick  $year-$month-$date")
+                                vibrator?.vibrate(VibrationEffect.createOneShot(100, DEFAULT_AMPLITUDE))
                             }
                             catch (e: Exception)
                             {
@@ -277,6 +286,7 @@ fun MonthlyCalendar(initialYear: Int, initialMonth: Int, initialDate: Int)
                                 month = calendar[Calendar.MONTH] + 1
                                 year = calendar[Calendar.YEAR]
                                 Log.d("Button(Next)", "onClick  $year-$month-$date")
+                                vibrator?.vibrate(VibrationEffect.createOneShot(25, DEFAULT_AMPLITUDE))
                             }
                             catch (e: Exception)
                             {
