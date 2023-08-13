@@ -114,96 +114,99 @@ fun MonthlyCalendar(initialYear: Int, initialMonth: Int, initialDate: Int)
                         fontSize = yearMonthSize,
                     )
                 }
-                Column {
-                    val dow = arrayListOf(
-                        stringResource(id = R.string.label_sunday),
-                        stringResource(id = R.string.label_monday),
-                        stringResource(id = R.string.label_tuesday),
-                        stringResource(id = R.string.label_wednesday),
-                        stringResource(id = R.string.label_thursday),
-                        stringResource(id = R.string.label_friday),
-                        stringResource(id = R.string.label_saturday))
+                Row(Modifier.align(Alignment.CenterHorizontally))
+                {
+                    Column {
+                        val dow = arrayListOf(
+                            stringResource(id = R.string.label_sunday),
+                            stringResource(id = R.string.label_monday),
+                            stringResource(id = R.string.label_tuesday),
+                            stringResource(id = R.string.label_wednesday),
+                            stringResource(id = R.string.label_thursday),
+                            stringResource(id = R.string.label_friday),
+                            stringResource(id = R.string.label_saturday))
 
-                    Row(Modifier.align(Alignment.CenterHorizontally)) {
-                        for ((index, dayOfWeek) in dow.withIndex())
-                        {
-                            val fontColor = if (index == 0) {
-                                Red400  // 日曜日
-                            } else if (index == 6)
+                        Row(Modifier.align(Alignment.CenterHorizontally)) {
+                            for ((index, dayOfWeek) in dow.withIndex())
                             {
-                                Blue230 // 土曜日
-                            }
-                            else if (index == 3)
-                            {
-                                White230_2 // 水曜日
-                            }
-                            else
-                            {
-                                White230  // 月、火、木、金
-                            }
-                            Text(
-                                text = "$dayOfWeek ",
-                                color = fontColor,
-                                fontWeight = FontWeight.Normal,
-                                textAlign = TextAlign.Center,
-                                fontSize = dateSize,
-                            )
-                        }
-                    }
-
-                    // がレンダー表示の先頭を決める
-                    val calendar: Calendar = Calendar.getInstance()
-                    val currentYear = calendar[Calendar.YEAR]
-                    val currentMonth = calendar[Calendar.MONTH] + 1
-                    val currentDate = calendar[Calendar.DATE]
-                    calendar.set(year, (month - 1), 1)
-                    calendar.add(Calendar.DATE, getDayOfWeekIndex(calendar) * (-1))
-
-                    // 6週のカレンダーを表示
-                    for (index in 1..6)
-                    {
-                        Row(
-                            Modifier
-                                .align(Alignment.CenterHorizontally)
-                                .background(
-                                    color = if ((index % 2) == 0) {
-                                        Black50
-                                    } else {
-                                        Black000
-                                    }
-                                ) ) {
-                            for (dayOfWeek in 1..7)
-                            {
-                                val dateColor = if (dayOfWeek == 1) {
+                                val fontColor = if (index == 0) {
                                     Red400  // 日曜日
-                                } else if (dayOfWeek == 7)
+                                } else if (index == 6)
                                 {
                                     Blue230 // 土曜日
                                 }
-                                else if (dayOfWeek == 4)
+                                else if (index == 3)
                                 {
                                     White230_2 // 水曜日
                                 }
                                 else
                                 {
-                                    White230  // 月～金
-                                }
-                                var fontWeight = FontWeight.Normal
-                                var dayString = ""
-                                dayString += if ((currentDate == calendar[Calendar.DATE]) && (currentMonth - 1 == calendar[Calendar.MONTH]) && (currentYear == calendar[Calendar.YEAR])) {
-                                    fontWeight = FontWeight.Bold
-                                    "[%02d]".format(calendar[Calendar.DATE])
-                                } else {
-                                    " %02d ".format(calendar[Calendar.DATE])
+                                    White230  // 月、火、木、金
                                 }
                                 Text(
-                                    text = dayString,
-                                    color = dateColor,
-                                    fontWeight = fontWeight,
+                                    text = "$dayOfWeek ",
+                                    color = fontColor,
+                                    fontWeight = FontWeight.Normal,
                                     textAlign = TextAlign.Center,
                                     fontSize = dateSize,
                                 )
-                                calendar.add(Calendar.DATE, 1)
+                            }
+                        }
+
+                        // がレンダー表示の先頭を決める
+                        val calendar: Calendar = Calendar.getInstance()
+                        val currentYear = calendar[Calendar.YEAR]
+                        val currentMonth = calendar[Calendar.MONTH] + 1
+                        val currentDate = calendar[Calendar.DATE]
+                        calendar.set(year, (month - 1), 1)
+                        calendar.add(Calendar.DATE, getDayOfWeekIndex(calendar) * (-1))
+
+                        // 6週のカレンダーを表示
+                        for (index in 1..6)
+                        {
+                            Row(
+                                Modifier
+                                    .align(Alignment.CenterHorizontally)
+                                    .background(
+                                        color = if ((index % 2) == 0) {
+                                            Black50
+                                        } else {
+                                            Black000
+                                        }
+                                    ) ) {
+                                for (dayOfWeek in 1..7)
+                                {
+                                    val dateColor = if (dayOfWeek == 1) {
+                                        Red400  // 日曜日
+                                    } else if (dayOfWeek == 7)
+                                    {
+                                        Blue230 // 土曜日
+                                    }
+                                    else if (dayOfWeek == 4)
+                                    {
+                                        White230_2 // 水曜日
+                                    }
+                                    else
+                                    {
+                                        White230  // 月～金
+                                    }
+                                    var fontWeight = FontWeight.Normal
+                                    var dayString = ""
+                                    dayString += if ((currentDate == calendar[Calendar.DATE]) && (currentMonth - 1 == calendar[Calendar.MONTH]) && (currentYear == calendar[Calendar.YEAR])) {
+                                        fontWeight = FontWeight.Bold
+                                        "[%02d]".format(calendar[Calendar.DATE])
+                                    } else {
+                                        " %02d ".format(calendar[Calendar.DATE])
+                                    }
+                                    Text(
+                                        text = dayString,
+                                        color = dateColor,
+                                        fontWeight = fontWeight,
+                                        textAlign = TextAlign.Center,
+                                        fontSize = dateSize,
+                                    )
+                                    calendar.add(Calendar.DATE, 1)
+                                }
                             }
                         }
                     }
