@@ -2,12 +2,14 @@ package net.osdn.ja.gokigen.wearos.calendar.presentation.ui
 
 import android.text.format.DateFormat
 import android.util.Log
+import androidx.compose.foundation.background
 import androidx.compose.foundation.focusable
 import androidx.compose.foundation.gestures.scrollBy
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -26,6 +28,7 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.rotary.onRotaryScrollEvent
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Devices
@@ -42,7 +45,13 @@ import androidx.wear.compose.material.TimeTextDefaults
 import androidx.wear.compose.material.scrollAway
 import kotlinx.coroutines.launch
 import net.osdn.ja.gokigen.wearos.calendar.R
+import net.osdn.ja.gokigen.wearos.calendar.presentation.theme.Black000
+import net.osdn.ja.gokigen.wearos.calendar.presentation.theme.Black50
+import net.osdn.ja.gokigen.wearos.calendar.presentation.theme.Blue230
 import net.osdn.ja.gokigen.wearos.calendar.presentation.theme.MonthlyCalendarTheme
+import net.osdn.ja.gokigen.wearos.calendar.presentation.theme.Red400
+import net.osdn.ja.gokigen.wearos.calendar.presentation.theme.White230
+import net.osdn.ja.gokigen.wearos.calendar.presentation.theme.White230_2
 import net.osdn.ja.gokigen.wearos.calendar.presentation.theme.wearColorPalette
 import java.util.Calendar
 import java.util.Locale
@@ -59,7 +68,7 @@ fun MonthlyCalendar(initialYear: Int, initialMonth: Int, initialDate: Int)
         val coroutineScope = rememberCoroutineScope()
         val scrollState = rememberScrollState()
         val yearMonthSize = 16.sp
-        val dateSize = 12.sp
+        val dateSize = 13.sp
 
         val showTitleYearMonth =  "%04d-%02d".format(year, month)
 
@@ -87,6 +96,7 @@ fun MonthlyCalendar(initialYear: Int, initialMonth: Int, initialDate: Int)
                         }
                         true
                     }
+                    .fillMaxWidth()
                     .verticalScroll(scrollState)
                     .padding(horizontal = 20.dp, vertical = 20.dp)
                     .focusRequester(focusRequester)
@@ -105,15 +115,43 @@ fun MonthlyCalendar(initialYear: Int, initialMonth: Int, initialDate: Int)
                     )
                 }
                 Column {
-                    Text(
-                        text = " SU MO TU WE TH FR SA ",
-                        //color = defaultColorPalette.primary,
-                        fontWeight = FontWeight.Normal,
-                        color = wearColorPalette.secondary,
-                        textAlign = TextAlign.Center,
-                        fontSize = dateSize,
-                    )
+                    val dow = arrayListOf(
+                        stringResource(id = R.string.label_sunday),
+                        stringResource(id = R.string.label_monday),
+                        stringResource(id = R.string.label_tuesday),
+                        stringResource(id = R.string.label_wednesday),
+                        stringResource(id = R.string.label_thursday),
+                        stringResource(id = R.string.label_friday),
+                        stringResource(id = R.string.label_saturday))
 
+                    Row(Modifier.align(Alignment.CenterHorizontally)) {
+                        for ((index, dayOfWeek) in dow.withIndex())
+                        {
+                            val fontColor = if (index == 0) {
+                                Red400  // 日曜日
+                            } else if (index == 6)
+                            {
+                                Blue230 // 土曜日
+                            }
+                            else if (index == 3)
+                            {
+                                White230_2 // 水曜日
+                            }
+                            else
+                            {
+                                White230  // 月、火、木、金
+                            }
+                            Text(
+                                text = "$dayOfWeek ",
+                                color = fontColor,
+                                fontWeight = FontWeight.Normal,
+                                textAlign = TextAlign.Center,
+                                fontSize = dateSize,
+                            )
+                        }
+                    }
+
+                    // がレンダー表示の先頭を決める
                     val calendar: Calendar = Calendar.getInstance()
                     val currentYear = calendar[Calendar.YEAR]
                     val currentMonth = calendar[Calendar.MONTH] + 1
@@ -121,25 +159,53 @@ fun MonthlyCalendar(initialYear: Int, initialMonth: Int, initialDate: Int)
                     calendar.set(year, (month - 1), 1)
                     calendar.add(Calendar.DATE, getDayOfWeekIndex(calendar) * (-1))
 
+                    // 6週のカレンダーを表示
                     for (index in 1..6)
                     {
-                        var dayString = ""
-                        for (dayOfWeek in 1 .. 7)
-                        {
-                            dayString += if ((currentDate == calendar[Calendar.DATE])&&(currentMonth - 1 == calendar[Calendar.MONTH])&&(currentYear == calendar[Calendar.YEAR])) {
-                                "[%02d]".format(calendar[Calendar.DATE])
-                            } else {
-                                " %02d ".format(calendar[Calendar.DATE])
+                        Row(
+                            Modifier
+                                .align(Alignment.CenterHorizontally)
+                                .background(
+                                    color = if ((index % 2) == 0) {
+                                        Black50
+                                    } else {
+                                        Black000
+                                    }
+                                ) ) {
+                            for (dayOfWeek in 1..7)
+                            {
+                                val dateColor = if (dayOfWeek == 1) {
+                                    Red400  // 日曜日
+                                } else if (dayOfWeek == 7)
+                                {
+                                    Blue230 // 土曜日
+                                }
+                                else if (dayOfWeek == 4)
+                                {
+                                    White230_2 // 水曜日
+                                }
+                                else
+                                {
+                                    White230  // 月～金
+                                }
+                                var fontWeight = FontWeight.Normal
+                                var dayString = ""
+                                dayString += if ((currentDate == calendar[Calendar.DATE]) && (currentMonth - 1 == calendar[Calendar.MONTH]) && (currentYear == calendar[Calendar.YEAR])) {
+                                    fontWeight = FontWeight.Bold
+                                    "[%02d]".format(calendar[Calendar.DATE])
+                                } else {
+                                    " %02d ".format(calendar[Calendar.DATE])
+                                }
+                                Text(
+                                    text = dayString,
+                                    color = dateColor,
+                                    fontWeight = fontWeight,
+                                    textAlign = TextAlign.Center,
+                                    fontSize = dateSize,
+                                )
+                                calendar.add(Calendar.DATE, 1)
                             }
-                            calendar.add(Calendar.DATE, 1)
                         }
-                        Text(
-                            text = dayString,
-                            //color = defaultColorPalette.primary,
-                            fontWeight = FontWeight.Normal,
-                            textAlign = TextAlign.Center,
-                            fontSize = dateSize,
-                        )
                     }
                 }
                 Spacer(modifier = Modifier.padding(4.dp))

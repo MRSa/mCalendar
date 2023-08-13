@@ -2,6 +2,14 @@
     <string name="app_name">MonthlyCalendar</string>
     <string name="permission_not_granted">Permissions not granted by the user.</string>
 
+    <string name="label_sunday">SU </string>
+    <string name="label_monday">MO </string>
+    <string name="label_tuesday">TU </string>
+    <string name="label_wednesday">WE </string>
+    <string name="label_thursday">TH </string>
+    <string name="label_friday">FR </string>
+    <string name="label_saturday">SA </string>
+
     <string name="tile_label">Monthly Calendar</string>
-    <string name="hello_world">Hi,\nHello, %1$s!</string>
+
 </resources>

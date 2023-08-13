@@ -2,7 +2,25 @@
     <string name="app_name">月間カレンダー</string>
     <string name="permission_not_granted">必要な権限が有効ではありません。有効にしてください。</string>
 
+    <!-- レイアウトは英語表記bの方がよさそう -->
+<!--
+    <string name="label_sunday">日 </string>
+    <string name="label_monday">月 </string>
+    <string name="label_tuesday">火 </string>
+    <string name="label_wednesday">水 </string>
+    <string name="label_thursday">木 </string>
+    <string name="label_friday">金 </string>
+    <string name="label_saturday">土 </string>
+-->
+
+    <string name="label_sunday">SU </string>
+    <string name="label_monday">MO </string>
+    <string name="label_tuesday">TU </string>
+    <string name="label_wednesday">WE </string>
+    <string name="label_thursday">TH </string>
+    <string name="label_friday">FR </string>
+    <string name="label_saturday">SA </string>
+
     <string name="tile_label">月間カレンダー</string>
-    <string name="hello_world">こんにちは！\nHello, %1$s!</string>
 
 </resources>
