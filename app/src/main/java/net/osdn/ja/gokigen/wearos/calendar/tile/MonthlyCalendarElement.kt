@@ -18,8 +18,8 @@ class MonthlyCalendarElement(private val context: Context)
     private val targetDate = today[Calendar.DATE]
 
     // 表示する年と月
-    var year = targetYear
-    var month  = targetMonth
+    private var year = targetYear
+    private var month  = targetMonth
 
     init {
         // ”指定された日" から、翌月の開始日を確認し、当日表示が最下行にくる場合は、翌月表示にする
@@ -73,25 +73,37 @@ class MonthlyCalendarElement(private val context: Context)
 
     private fun drawDayOfWeekTitle(clickable: ModifiersBuilders.Clickable): LayoutElementBuilders.LayoutElement
     {
+        val backColor = 0xFF000000.toInt()
         val row = LayoutElementBuilders.Row.Builder()
-        row.addContent(getTextContent(clickable, context.getString(R.string.label_sunday) + " ", 0xFFCF6679.toInt()))
-        row.addContent(getTextContent(clickable, context.getString(R.string.label_monday) + " ", 0xFFE6E6E6.toInt()))
-        row.addContent(getTextContent(clickable, context.getString(R.string.label_tuesday) + " ", 0xFFE6E6E6.toInt()))
-        row.addContent(getTextContent(clickable, context.getString(R.string.label_wednesday) + " ", 0xFFE6C6E6.toInt()))
-        row.addContent(getTextContent(clickable, context.getString(R.string.label_thursday) + " ", 0xFFE6E6E6.toInt()))
-        row.addContent(getTextContent(clickable, context.getString(R.string.label_friday) + " ", 0xFFE6E6E6.toInt()))
-        row.addContent(getTextContent(clickable, context.getString(R.string.label_saturday) + " ", 0xFF85BADE.toInt()))
+        row.setModifiers(ModifiersBuilders.Modifiers.Builder()
+            .setClickable(clickable)
+            .setBackground(
+                ModifiersBuilders.Background.Builder().
+                setColor(ColorBuilders.ColorProp.Builder(backColor).build())
+                    .build())
+            .build())
+        row.addContent(getTextContent(clickable, context.getString(R.string.label_sunday) + " ", 0xFFCF6679.toInt(), backColor))
+        row.addContent(getTextContent(clickable, context.getString(R.string.label_monday) + " ", 0xFFE6E6E6.toInt(), backColor))
+        row.addContent(getTextContent(clickable, context.getString(R.string.label_tuesday) + " ", 0xFFE6E6E6.toInt(), backColor))
+        row.addContent(getTextContent(clickable, context.getString(R.string.label_wednesday) + " ", 0xFFE6C6E6.toInt(), backColor))
+        row.addContent(getTextContent(clickable, context.getString(R.string.label_thursday) + " ", 0xFFE6E6E6.toInt(), backColor))
+        row.addContent(getTextContent(clickable, context.getString(R.string.label_friday) + " ", 0xFFE6E6E6.toInt(), backColor))
+        row.addContent(getTextContent(clickable, context.getString(R.string.label_saturday) + " ", 0xFF85BADE.toInt(), backColor))
         return (row.build())
     }
 
-    private fun getTextContent(clickable: ModifiersBuilders.Clickable, label: String, color: Int): LayoutElementBuilders.LayoutElement
+    private fun getTextContent(clickable: ModifiersBuilders.Clickable, label: String, foreColor: Int, backColor: Int): LayoutElementBuilders.LayoutElement
     {
         return (Text.Builder(context, label)
             .setModifiers(
                 ModifiersBuilders.Modifiers.Builder()
                     .setClickable(clickable)
+                    .setBackground(
+                        ModifiersBuilders.Background.Builder().
+                        setColor(ColorBuilders.ColorProp.Builder(backColor).build())
+                            .build())
                     .build())
-            .setColor(ColorBuilders.ColorProp.Builder(color).build())
+            .setColor(ColorBuilders.ColorProp.Builder(foreColor).build())
             .setTypography(Typography.TYPOGRAPHY_CAPTION2)
             .build())
     }
@@ -107,10 +119,21 @@ class MonthlyCalendarElement(private val context: Context)
         calendar.set(year, (month - 1), 1)
         calendar.add(Calendar.DATE, getDayOfWeekIndex(calendar) * (-1))
 
-        // 6週のカレンダーを表示
-        for (index in 1..6)
+        // 5週分のカレンダーを表示
+        for (index in 1..5)
         {
+            val backColor = if ((index % 2) == 0) { 0xFF000000.toInt() } else { 0xFF505050.toInt() }
             val row = LayoutElementBuilders.Row.Builder()
+            row.setModifiers(
+                ModifiersBuilders.Modifiers.Builder()
+                    .setClickable(clickable)
+                    .setBackground(
+                        ModifiersBuilders.Background.Builder().setColor(
+                            ColorBuilders.ColorProp.Builder(backColor).build()
+                        )
+                        .build())
+                    .build()
+            )
             for (dayOfWeek in 1..7)
             {
                 var dayString = ""
@@ -119,7 +142,7 @@ class MonthlyCalendarElement(private val context: Context)
                 } else {
                     " %02d ".format(calendar[Calendar.DATE])
                 }
-                row.addContent(getTextContent(clickable, dayString, getDayOfWeekColor(calendar)))
+                row.addContent(getTextContent(clickable, dayString, getDayOfWeekColor(calendar), backColor))
                 calendar.add(Calendar.DATE, 1)
             }
             column.addContent(row.build())
