@@ -197,17 +197,19 @@ fun MonthlyCalendar(initialYear: Int, initialMonth: Int, initialDate: Int)
                                     {
                                         White230  // 月～金
                                     }
+                                    var foregroundColor = dateColor
+                                    var backgroundColor = if ((index % 2) == 0) { Black50 } else { Black000 }
                                     var fontWeight = FontWeight.Normal
-                                    var dayString = ""
-                                    dayString += if ((currentDate == calendar[Calendar.DATE]) && (currentMonth - 1 == calendar[Calendar.MONTH]) && (currentYear == calendar[Calendar.YEAR])) {
+                                    val dayString = " %02d ".format(calendar[Calendar.DATE])
+                                    if ((currentDate == calendar[Calendar.DATE]) && (currentMonth - 1 == calendar[Calendar.MONTH]) && (currentYear == calendar[Calendar.YEAR])) {
                                         fontWeight = FontWeight.Bold
-                                        "[%02d]".format(calendar[Calendar.DATE])
-                                    } else {
-                                        " %02d ".format(calendar[Calendar.DATE])
+                                        foregroundColor = backgroundColor
+                                        backgroundColor = dateColor
                                     }
                                     Text(
                                         text = dayString,
-                                        color = dateColor,
+                                        Modifier.background(backgroundColor),
+                                        color = foregroundColor,
                                         fontWeight = fontWeight,
                                         textAlign = TextAlign.Center,
                                         fontSize = dateSize,

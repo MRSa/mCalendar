@@ -137,12 +137,14 @@ class MonthlyCalendarElement(private val context: Context)
             for (dayOfWeek in 1..7)
             {
                 var dayString = ""
-                dayString += if ((targetDate == calendar[Calendar.DATE]) && (targetMonth - 1 == calendar[Calendar.MONTH]) && (targetYear == calendar[Calendar.YEAR])) {
-                    "[%02d]".format(calendar[Calendar.DATE])
-                } else {
-                    " %02d ".format(calendar[Calendar.DATE])
+                var foregroundColor = getDayOfWeekColor(calendar)
+                var backgroundColor = backColor
+                if ((targetDate == calendar[Calendar.DATE]) && (targetMonth - 1 == calendar[Calendar.MONTH]) && (targetYear == calendar[Calendar.YEAR])) {
+                    foregroundColor = backColor
+                    backgroundColor = getDayOfWeekColor(calendar)
                 }
-                row.addContent(getTextContent(clickable, dayString, getDayOfWeekColor(calendar), backColor))
+                dayString += " %02d ".format(calendar[Calendar.DATE])
+                row.addContent(getTextContent(clickable, dayString, foregroundColor, backgroundColor))
                 calendar.add(Calendar.DATE, 1)
             }
             column.addContent(row.build())
