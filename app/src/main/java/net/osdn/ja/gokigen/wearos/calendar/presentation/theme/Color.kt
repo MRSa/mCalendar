@@ -13,7 +13,7 @@ val Red400 = Color(0xFFCF6679)
 val White230 = Color(0xFFE6E6E6)
 val White230_2 = Color(0xFFE6C6E6)
 val Black000 = Color(0xFF000000)
-val Black50 = Color(0xFF505050)
+val Black50 = Color(0xFF303030)
 val Blue230 = Color(0xFF85BADE)
 
 internal val wearColorPalette: Colors = Colors(

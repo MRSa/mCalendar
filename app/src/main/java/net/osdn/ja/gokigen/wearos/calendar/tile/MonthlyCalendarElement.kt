@@ -122,7 +122,7 @@ class MonthlyCalendarElement(private val context: Context)
         // 5週分のカレンダーを表示
         for (index in 1..5)
         {
-            val backColor = if ((index % 2) == 0) { 0xFF000000.toInt() } else { 0xFF505050.toInt() }
+            val backColor = if ((index % 2) == 0) { 0xFF000000.toInt() } else { 0xFF303030.toInt() }
             val row = LayoutElementBuilders.Row.Builder()
             row.setModifiers(
                 ModifiersBuilders.Modifiers.Builder()
