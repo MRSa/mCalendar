@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">月間カレンダー</string>
+    <string name="app_name">mCalendar</string>
     <string name="permission_not_granted">必要な権限が有効ではありません。有効にしてください。</string>
 
     <!-- レイアウトは英語表記bの方がよさそう -->
