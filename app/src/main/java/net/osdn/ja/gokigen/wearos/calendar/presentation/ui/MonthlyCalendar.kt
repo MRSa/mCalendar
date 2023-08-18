@@ -35,6 +35,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -55,6 +56,7 @@ import net.osdn.ja.gokigen.wearos.calendar.presentation.theme.Black50
 import net.osdn.ja.gokigen.wearos.calendar.presentation.theme.Blue230
 import net.osdn.ja.gokigen.wearos.calendar.presentation.theme.MonthlyCalendarTheme
 import net.osdn.ja.gokigen.wearos.calendar.presentation.theme.Red400
+import net.osdn.ja.gokigen.wearos.calendar.presentation.theme.Teal200
 import net.osdn.ja.gokigen.wearos.calendar.presentation.theme.White230
 import net.osdn.ja.gokigen.wearos.calendar.presentation.theme.White230_2
 import net.osdn.ja.gokigen.wearos.calendar.presentation.theme.wearColorPalette
@@ -78,6 +80,7 @@ fun MonthlyCalendar(initialYear: Int, initialMonth: Int, initialDate: Int)
         val dateSize = 13.sp
         val horizontalPadding = 5.dp  // square: 5dp, round: 20dp
         val showTitleYearMonth =  "%04d-%02d".format(year, month)
+        val anniversaryProvider = HolidayAnniversaryProvider()
 
         Scaffold(
             timeText = {
@@ -200,12 +203,41 @@ fun MonthlyCalendar(initialYear: Int, initialMonth: Int, initialDate: Int)
                                     var foregroundColor = dateColor
                                     var backgroundColor = if ((index % 2) == 0) { Black50 } else { Black000 }
                                     var fontWeight = FontWeight.Normal
+                                    var textDecoration = TextDecoration.None
                                     val dayString = " %02d ".format(calendar[Calendar.DATE])
+
+                                    // 表示する日の追加属性(休日とか...)が付与されていないかを確認する
+                                    when (anniversaryProvider.checkDate(calendar)) {
+                                        DateModification.HOLIDAY -> {
+                                            // 休日
+                                            foregroundColor = Red400
+                                        }
+                                        DateModification.ANNIVERSARY -> {
+                                            // 記念日
+                                            foregroundColor = Teal200
+                                        }
+                                        DateModification.NOTIFY -> {
+                                            // 通知１
+                                            textDecoration = TextDecoration.Underline
+                                        }
+                                        DateModification.NOTIFY2 -> {
+                                            // 通知２
+                                            textDecoration = TextDecoration.LineThrough
+                                        }
+                                        DateModification.NORMAL -> {
+                                            // 通常の日、何も設定しない
+                                            textDecoration = TextDecoration.None
+                                        }
+                                    }
+
                                     if ((currentDate == calendar[Calendar.DATE]) && (currentMonth - 1 == calendar[Calendar.MONTH]) && (currentYear == calendar[Calendar.YEAR])) {
+                                        // "今日" だった場合は、色を反転させる
                                         fontWeight = FontWeight.Bold
                                         foregroundColor = backgroundColor
                                         backgroundColor = dateColor
                                     }
+
+                                    // テキスト表示
                                     Text(
                                         text = dayString,
                                         Modifier.background(backgroundColor),
@@ -213,6 +245,7 @@ fun MonthlyCalendar(initialYear: Int, initialMonth: Int, initialDate: Int)
                                         fontWeight = fontWeight,
                                         textAlign = TextAlign.Center,
                                         fontSize = dateSize,
+                                        textDecoration = textDecoration,
                                     )
                                     calendar.add(Calendar.DATE, 1)
                                 }
@@ -260,7 +293,7 @@ fun MonthlyCalendar(initialYear: Int, initialMonth: Int, initialDate: Int)
                                 month = calendar[Calendar.MONTH] + 1
                                 date = calendar[Calendar.DATE]
                                 Log.d("Button(Today)", "onClick  $year-$month-$date")
-                                vibrator?.vibrate(VibrationEffect.createOneShot(100, DEFAULT_AMPLITUDE))
+                                vibrator?.vibrate(VibrationEffect.createOneShot(60, DEFAULT_AMPLITUDE))
                             }
                             catch (e: Exception)
                             {
