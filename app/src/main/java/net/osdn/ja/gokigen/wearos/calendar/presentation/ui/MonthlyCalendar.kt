@@ -10,8 +10,10 @@ import androidx.compose.foundation.focusable
 import androidx.compose.foundation.gestures.scrollBy
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -19,6 +21,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
@@ -77,6 +80,7 @@ fun MonthlyCalendar(initialYear: Int, initialMonth: Int, initialDate: Int)
         val coroutineScope = rememberCoroutineScope()
         val scrollState = rememberScrollState()
         val yearMonthSize = 16.sp
+        val anniversarySize = 14.sp
         val dateSize = 13.sp
         val horizontalPadding = 5.dp  // square: 5dp, round: 20dp
         val showTitleYearMonth =  "%04d-%02d".format(year, month)
@@ -111,7 +115,7 @@ fun MonthlyCalendar(initialYear: Int, initialMonth: Int, initialDate: Int)
                     .padding(horizontal = horizontalPadding, vertical = 20.dp)
                     .focusRequester(focusRequester)
                     .focusable(),
-                verticalArrangement = Arrangement.Center,
+                verticalArrangement = Arrangement.Top,
                 horizontalAlignment = Alignment.Start,
             ) {
                 Row(Modifier.align(Alignment.CenterHorizontally))
@@ -139,19 +143,19 @@ fun MonthlyCalendar(initialYear: Int, initialMonth: Int, initialDate: Int)
                         Row(Modifier.align(Alignment.CenterHorizontally)) {
                             for ((index, dayOfWeek) in dow.withIndex())
                             {
-                                val fontColor = if (index == 0) {
-                                    Red400  // 日曜日
-                                } else if (index == 6)
-                                {
-                                    Blue230 // 土曜日
-                                }
-                                else if (index == 3)
-                                {
-                                    White230_2 // 水曜日
-                                }
-                                else
-                                {
-                                    White230  // 月、火、木、金
+                                val fontColor = when (index) {
+                                    0 -> {
+                                        Red400  // 日曜日
+                                    }
+                                    6 -> {
+                                        Blue230 // 土曜日
+                                    }
+                                    3 -> {
+                                        White230_2 // 水曜日
+                                    }
+                                    else -> {
+                                        White230  // 月、火、木、金
+                                    }
                                 }
                                 Text(
                                     text = "$dayOfWeek ",
@@ -186,19 +190,19 @@ fun MonthlyCalendar(initialYear: Int, initialMonth: Int, initialDate: Int)
                                     ) ) {
                                 for (dayOfWeek in 1..7)
                                 {
-                                    val dateColor = if (dayOfWeek == 1) {
-                                        Red400  // 日曜日
-                                    } else if (dayOfWeek == 7)
-                                    {
-                                        Blue230 // 土曜日
-                                    }
-                                    else if (dayOfWeek == 4)
-                                    {
-                                        White230_2 // 水曜日
-                                    }
-                                    else
-                                    {
-                                        White230  // 月～金
+                                    val dateColor = when (dayOfWeek) {
+                                        1 -> {
+                                            Red400  // 日曜日
+                                        }
+                                        7 -> {
+                                            Blue230 // 土曜日
+                                        }
+                                        4 -> {
+                                            White230_2 // 水曜日
+                                        }
+                                        else -> {
+                                            White230  // 月～金
+                                        }
                                     }
                                     var foregroundColor = dateColor
                                     var backgroundColor = if ((index % 2) == 0) { Black50 } else { Black000 }
@@ -266,6 +270,7 @@ fun MonthlyCalendar(initialYear: Int, initialMonth: Int, initialDate: Int)
                                 month = calendar[Calendar.MONTH] + 1
                                 year = calendar[Calendar.YEAR]
                                 Log.d("Button(Previous)", "onClick $year-$month-$date")
+                                anniversaryProvider.update(calendar)
                                 vibrator?.vibrate(VibrationEffect.createOneShot(25, DEFAULT_AMPLITUDE))
                             }
                             catch (e: Exception)
@@ -293,6 +298,7 @@ fun MonthlyCalendar(initialYear: Int, initialMonth: Int, initialDate: Int)
                                 month = calendar[Calendar.MONTH] + 1
                                 date = calendar[Calendar.DATE]
                                 Log.d("Button(Today)", "onClick  $year-$month-$date")
+                                anniversaryProvider.update(calendar)
                                 vibrator?.vibrate(VibrationEffect.createOneShot(60, DEFAULT_AMPLITUDE))
                             }
                             catch (e: Exception)
@@ -321,6 +327,7 @@ fun MonthlyCalendar(initialYear: Int, initialMonth: Int, initialDate: Int)
                                 month = calendar[Calendar.MONTH] + 1
                                 year = calendar[Calendar.YEAR]
                                 Log.d("Button(Next)", "onClick  $year-$month-$date")
+                                anniversaryProvider.update(calendar)
                                 vibrator?.vibrate(VibrationEffect.createOneShot(25, DEFAULT_AMPLITUDE))
                             }
                             catch (e: Exception)
@@ -340,7 +347,35 @@ fun MonthlyCalendar(initialYear: Int, initialMonth: Int, initialDate: Int)
                         )
                     }
                 }
+                Spacer(modifier = Modifier.padding(4.dp))
+                // 記念日や休日の表示部分
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(PaddingValues(
+                        top = 1.dp,
+                        start = 16.dp,
+                        end = 8.dp,
+                        bottom = 12.dp,
+                    )),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.Start,
+                    )
+                {
+                    val dateList = ArrayList<String>()
+                    for (anniversary in dateList)
+                    {
+                        Text(
+                            text = anniversary,
+                            color = wearColorPalette.primary,
+                            fontWeight = FontWeight.Bold,
+                            fontSize = anniversarySize,
+                            textAlign = TextAlign.Center,
+                        )
+                    }
+                }
             }
+            LaunchedEffect(Unit) { focusRequester.requestFocus() }
         }
     }
 }
