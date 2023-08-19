@@ -17,11 +17,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
@@ -45,6 +47,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
 import androidx.wear.compose.material.Button
+import androidx.wear.compose.material.ButtonDefaults
 import androidx.wear.compose.material.Icon
 import androidx.wear.compose.material.PositionIndicator
 import androidx.wear.compose.material.Scaffold
@@ -96,7 +99,7 @@ fun MonthlyCalendar(initialYear: Int, initialMonth: Int, initialDate: Int)
                         )
                     ),
                     modifier = Modifier.scrollAway(scrollState = scrollState)
-                )
+                 )
             },
             positionIndicator = {
                 PositionIndicator(scrollState = scrollState)
@@ -257,7 +260,7 @@ fun MonthlyCalendar(initialYear: Int, initialMonth: Int, initialDate: Int)
                         }
                     }
                 }
-                Spacer(modifier = Modifier.padding(4.dp))
+                Spacer(modifier = Modifier.padding(2.dp))
                 Row(Modifier.align(Alignment.CenterHorizontally))
                 {
                     Button(
@@ -280,13 +283,19 @@ fun MonthlyCalendar(initialYear: Int, initialMonth: Int, initialDate: Int)
                         },
                         modifier = Modifier
                             .height(48.dp)
-                            .width(48.dp),
+                            .width(48.dp)
+                            .padding(2.dp),
+                        shape = RoundedCornerShape(10.dp),
+                        colors = ButtonDefaults.primaryButtonColors(),
                         enabled = true
                     ) {
                         Icon(
-                            painter = painterResource(id = R.drawable.baseline_arrow_left_24),
+                            painter = painterResource(id = R.drawable.baseline_arrow_back_24),
                             contentDescription = "Previous",
-                            tint = Color.LightGray
+                            modifier = Modifier
+                                .size(ButtonDefaults.LargeIconSize)
+                                .wrapContentSize(align = Alignment.Center),
+                            tint = Color.Black
                         )
                     }
                     Button(
@@ -308,13 +317,19 @@ fun MonthlyCalendar(initialYear: Int, initialMonth: Int, initialDate: Int)
                         },
                         modifier = Modifier
                             .height(48.dp)
-                            .width(48.dp),
+                            .width(48.dp)
+                            .padding(2.dp),
+                        shape = RoundedCornerShape(10.dp),
+                        colors = ButtonDefaults.primaryButtonColors(),
                         enabled = true
                     ) {
                         Icon(
                             painter = painterResource(id = R.drawable.baseline_today_24),
                             contentDescription = "Today",
-                            tint = Color.LightGray
+                            modifier = Modifier
+                                .size(ButtonDefaults.LargeIconSize)
+                                .wrapContentSize(align = Alignment.Center),
+                            tint = Color.Black
                         )
                     }
                     Button(
@@ -337,13 +352,19 @@ fun MonthlyCalendar(initialYear: Int, initialMonth: Int, initialDate: Int)
                         },
                         modifier = Modifier
                             .height(48.dp)
-                            .width(48.dp),
+                            .width(48.dp)
+                            .padding(2.dp),
+                        shape = RoundedCornerShape(10.dp),
+                        colors = ButtonDefaults.primaryButtonColors(),
                         enabled = true
                     ) {
                         Icon(
-                            painter = painterResource(id = R.drawable.baseline_arrow_right_24),
+                            painter = painterResource(id = R.drawable.baseline_arrow_forward_24),
                             contentDescription = "Next",
-                            tint = Color.LightGray
+                            modifier = Modifier
+                                .size(ButtonDefaults.LargeIconSize)
+                                .wrapContentSize(align = Alignment.Center),
+                            tint = Color.Black
                         )
                     }
                 }
@@ -352,12 +373,14 @@ fun MonthlyCalendar(initialYear: Int, initialMonth: Int, initialDate: Int)
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(PaddingValues(
-                        top = 1.dp,
-                        start = 16.dp,
-                        end = 8.dp,
-                        bottom = 12.dp,
-                    )),
+                        .padding(
+                            PaddingValues(
+                                top = 1.dp,
+                                start = 16.dp,
+                                end = 8.dp,
+                                bottom = 12.dp,
+                            )
+                        ),
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.Start,
                     )
@@ -375,8 +398,8 @@ fun MonthlyCalendar(initialYear: Int, initialMonth: Int, initialDate: Int)
                     }
                 }
             }
-            LaunchedEffect(Unit) { focusRequester.requestFocus() }
         }
+        //LaunchedEffect(Unit) { focusRequester.requestFocus() }
     }
 }
 
