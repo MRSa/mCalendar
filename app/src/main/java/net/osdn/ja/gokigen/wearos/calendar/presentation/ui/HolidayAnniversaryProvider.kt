@@ -10,7 +10,7 @@ import kotlinx.coroutines.withContext
 import java.util.Calendar
 
 enum class DateModification {
-    NORMAL, HOLIDAY, ANNIVERSARY, NOTIFY, NOTIFY2
+    NORMAL, HOLIDAY, ANNIVERSARY, NOTIFY, EVENT
 }
 class HolidayAnniversaryProvider : ViewModel()
 {

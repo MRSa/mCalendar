@@ -1,6 +1,7 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("com.google.devtools.ksp")
 }
 
 android {
@@ -15,6 +16,14 @@ android {
         versionName = "1.0.2"
         vectorDrawables {
             useSupportLibrary = true
+        }
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments += mapOf(
+                    "room.schemaLocation" to "$projectDir/schemas",
+                    "room.incremental" to "true"
+                )
+            }
         }
     }
 
@@ -50,26 +59,32 @@ android {
 dependencies {
     implementation("androidx.core:core-splashscreen:1.0.1")
     implementation("androidx.core:core-ktx:1.10.1")
-    implementation("com.google.android.gms:play-services-wearable:18.0.0")
     implementation("androidx.percentlayout:percentlayout:1.0.0")
     implementation("androidx.legacy:legacy-support-v4:1.0.0")
     implementation("androidx.recyclerview:recyclerview:1.3.1")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.1")
+
+    implementation("androidx.activity:activity-compose:1.7.2")
 
     val composeVersion = "2023.08.00"
     implementation(platform("androidx.compose:compose-bom:$composeVersion"))
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.ui:ui-tooling-preview")
+
     val wearComposeVersion = "1.2.0"
-    implementation("androidx.wear.compose:compose-material:$wearComposeVersion")
     implementation("androidx.wear.compose:compose-foundation:$wearComposeVersion")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.1")
-    implementation("androidx.activity:activity-compose:1.7.2")
+    implementation("androidx.wear.compose:compose-material:$wearComposeVersion")
+
     val tilesVersion = "1.2.0"
     implementation("androidx.wear.tiles:tiles:$tilesVersion")
     implementation("androidx.wear.tiles:tiles-material:$tilesVersion")
+
     val horologistVersion = "0.5.3"
     implementation("com.google.android.horologist:horologist-compose-tools:$horologistVersion")
     implementation("com.google.android.horologist:horologist-tiles:$horologistVersion")
-    implementation("androidx.wear.watchface:watchface-complications-data-source-ktx:1.1.1")
-    debugImplementation("androidx.compose.ui:ui-tooling")
+
+    val room_version = "2.5.2"
+    implementation("androidx.room:room-runtime:$room_version")
+    annotationProcessor("androidx.room:room-compiler:$room_version")
+    ksp("androidx.room:room-compiler:$room_version")
 }

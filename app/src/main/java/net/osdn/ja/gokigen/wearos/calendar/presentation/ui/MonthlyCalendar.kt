@@ -227,7 +227,7 @@ fun MonthlyCalendar(initialYear: Int, initialMonth: Int, initialDate: Int)
                                             // 通知１
                                             textDecoration = TextDecoration.Underline
                                         }
-                                        DateModification.NOTIFY2 -> {
+                                        DateModification.EVENT -> {
                                             // 通知２
                                             textDecoration = TextDecoration.LineThrough
                                         }

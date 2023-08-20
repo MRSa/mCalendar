@@ -12,4 +12,8 @@
 
     <string name="tile_label">Monthly Calendar</string>
 
+    <string name="data_imported">Imported: </string>
+    <string name="not_supported">Not support</string>
+    <string name="detect_error">Error</string>
+    <string name="import_success">Success</string>
 </resources>

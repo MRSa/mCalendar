@@ -22,5 +22,8 @@
     <string name="label_saturday">SA </string>
 
     <string name="tile_label">月間カレンダー</string>
-
+    <string name="data_imported">登録: </string>
+    <string name="not_supported">未対応</string>
+    <string name="detect_error">エラーあり</string>
+    <string name="import_success">成功</string>
 </resources>
