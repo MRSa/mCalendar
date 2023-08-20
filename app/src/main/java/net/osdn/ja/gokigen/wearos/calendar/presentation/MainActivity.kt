@@ -137,6 +137,24 @@ class MainActivity : ComponentActivity()
                 val thread = Thread {
                     val count = storageDao.getCount()
                     outputDebugLog("  ANNIVERSARY/HOLIDAY DATA COUNT : $count ")
+                    /*
+                    // 中身を全部ダンプする
+                    //val contents = storageDao.getAll()
+                    // 指定月でダンプする
+                    //val contents = storageDao.getContent(-1,8)
+                    // 指定年月でダンプする
+                    val contents = storageDao.getContent(2024,2)
+                    for (content in contents)
+                    {
+                        if (content.year < 0) {
+                            outputDebugLog("   ${content.month}/${content.date} : ${content.title} (${content.attribute})")
+                        }
+                        else
+                        {
+                            outputDebugLog("   ${content.year}-${content.month}-${content.date} : ${content.title} (${content.attribute})")
+                        }
+                    }
+                    */
                 }
                 thread.start()
             }

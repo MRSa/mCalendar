@@ -10,6 +10,11 @@ interface DataContentDao
 {
     @Query("SELECT COUNT(*) FROM contents")
     fun getCount(): Int
+    @Query("SELECT * FROM contents")
+    fun getAll(): List<DataContent>
+
+    @Query("SELECT * FROM contents WHERE (year = :yearData OR year < 0) AND month = :monthData")
+    fun getContent(yearData: Int, monthData: Int): List<DataContent>
 
     @Query("DELETE FROM contents")
     fun deleteAll()
@@ -34,5 +39,4 @@ interface DataContentDao
 
     @Delete
     fun delete(content: DataContent)
-
 }
