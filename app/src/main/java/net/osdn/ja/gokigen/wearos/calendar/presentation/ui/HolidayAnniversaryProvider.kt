@@ -7,6 +7,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import net.osdn.ja.gokigen.wearos.calendar.DbSingleton
+import net.osdn.ja.gokigen.wearos.calendar.storage.DataContent
 import java.util.Calendar
 
 enum class DateModification {
@@ -14,11 +16,29 @@ enum class DateModification {
 }
 class HolidayAnniversaryProvider : ViewModel()
 {
+    private val storageDao = DbSingleton.db.storageDao()
     private var isRefreshing = false
-    private val dateList = mutableStateListOf<String>()
+    private val dateList = mutableStateListOf<DataContent>()
 
     fun checkDate(calendar: Calendar) : DateModification
     {
+        for (dateInfo in dateList)
+        {
+            val month = calendar[Calendar.MONTH] + 1
+            val date = calendar[Calendar.DATE]
+            if ((dateInfo.month == month)&&(dateInfo.date == date))
+            {
+                val info = when (dateInfo.attribute) {
+                    0 -> DateModification.NORMAL
+                    1 -> DateModification.HOLIDAY
+                    2 -> DateModification.ANNIVERSARY
+                    3 -> DateModification.NOTIFY
+                    4 -> DateModification.EVENT
+                    else -> DateModification.NORMAL
+                }
+                return (info)
+            }
+        }
         return (DateModification.NORMAL)
     }
 
@@ -29,18 +49,18 @@ class HolidayAnniversaryProvider : ViewModel()
             {
                 isRefreshing = true
                 withContext(Dispatchers.Default) {
-                    updateMonthlyData(calendar)
+                    updateMonthlyData(calendar[Calendar.YEAR], calendar[Calendar.MONTH] + 1)
                 }
                 isRefreshing = false
             }
         }
     }
 
-    private fun updateMonthlyData(calendar: Calendar)
+    private fun updateMonthlyData(targetYear: Int, targetMonth: Int)
     {
-        val targetYear = calendar[Calendar.YEAR]
-        val targetMonth = calendar[Calendar.MONTH] + 1
-        Log.v(TAG, "  >>>>> $targetYear-$targetMonth ANNIVERSARY : ${dateList.size}")
+        dateList.clear()
+        dateList.addAll(storageDao.getContent(targetYear, targetMonth))
+        Log.v(TAG, " UPDATED($targetYear-$targetMonth) : ${dateList.size}")
     }
 
     companion object
