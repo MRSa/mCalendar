@@ -18,7 +18,11 @@ class HolidayAnniversaryProvider : ViewModel()
 {
     private val storageDao = DbSingleton.db.storageDao()
     private var isRefreshing = false
-    private val dateList = mutableStateListOf<DataContent>()
+    val dateList = mutableStateListOf<DataContent>()
+
+    init {
+        update(Calendar.getInstance())
+    }
 
     fun checkDate(calendar: Calendar) : DateModification
     {

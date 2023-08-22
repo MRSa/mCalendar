@@ -14,9 +14,10 @@ class ViewRoot @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
     @Composable
     override fun Content()
     {
+        val provider = HolidayAnniversaryProvider()
         val calendar = Calendar.getInstance()
         MonthlyCalendarTheme {
-             MonthlyCalendar(calendar[Calendar.YEAR], calendar[Calendar.MONTH] + 1, calendar[Calendar.DATE])
+             MonthlyCalendar(calendar[Calendar.YEAR], calendar[Calendar.MONTH] + 1, calendar[Calendar.DATE], provider)
         }
         Log.v(TAG, " ... Monthly Calendar (${calendar[Calendar.YEAR]}-${calendar[Calendar.MONTH] + 1}) ...")
     }
