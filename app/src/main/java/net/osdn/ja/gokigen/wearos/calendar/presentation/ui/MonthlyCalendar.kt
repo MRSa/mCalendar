@@ -233,13 +233,13 @@ fun MonthlyCalendar(initialYear: Int, initialMonth: Int, initialDate: Int, anniv
                                         }
 
                                         DateModification.NOTIFY -> {
-                                            // 通知１
-                                            textDecoration = TextDecoration.Underline
+                                            // 通知１ （取り消し線）
+                                            textDecoration = TextDecoration.LineThrough
                                         }
 
                                         DateModification.EVENT -> {
-                                            // 通知２
-                                            textDecoration = TextDecoration.LineThrough
+                                            // 通知２ (アンダーライン）
+                                            textDecoration = TextDecoration.Underline
                                         }
 
                                         DateModification.NORMAL -> {
@@ -322,7 +322,7 @@ fun MonthlyCalendar(initialYear: Int, initialMonth: Int, initialDate: Int, anniv
                                 anniversaryProvider.update(calendar)
                                 vibrator?.vibrate(
                                     VibrationEffect.createOneShot(
-                                        60,
+                                        50,
                                         DEFAULT_AMPLITUDE
                                     )
                                 )

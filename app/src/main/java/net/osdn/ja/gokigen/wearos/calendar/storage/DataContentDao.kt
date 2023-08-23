@@ -19,12 +19,18 @@ interface DataContentDao
     @Query("DELETE FROM contents")
     fun deleteAll()
 
+    @Query("DELETE FROM contents WHERE attribute = :attribute")
+    fun deleteAllAttribute(attribute: Int)
+
     @Query("DELETE FROM contents WHERE year < :yearData AND year >= 0")
     fun deleteBeforeByYear(yearData: Int)
+
     @Query("DELETE FROM contents WHERE year = :yearData AND month < :monthData")
     fun deleteBeforeByMonth(yearData: Int, monthData: Int)
+
     @Query("DELETE FROM contents WHERE year > :yearData")
     fun deleteAfterByYear(yearData: Int)
+
     @Query("DELETE FROM contents WHERE year = :yearData AND month > :monthData")
     fun deleteAfterByMonth(yearData: Int, monthData: Int)
 
@@ -33,6 +39,9 @@ interface DataContentDao
 
     @Query("DELETE FROM contents WHERE year = -1 AND month =:monthData")
     fun deleteMonthOnly(monthData: Int)
+
+    @Query("DELETE FROM contents WHERE year = -1 AND month = :monthData AND attribute = :attribute")
+    fun deleteMonthOnlyAttribute(monthData: Int, attribute: Int)
 
     @Insert
     fun insertAll(vararg contents: DataContent)
