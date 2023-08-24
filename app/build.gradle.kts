@@ -12,8 +12,8 @@ android {
         applicationId = "net.osdn.ja.gokigen.wearos.calendar"
         minSdk = 26
         targetSdk = 33
-        versionCode = 100002
-        versionName = "1.0.2"
+        versionCode = 100100
+        versionName = "1.1.0"
         vectorDrawables {
             useSupportLibrary = true
         }
