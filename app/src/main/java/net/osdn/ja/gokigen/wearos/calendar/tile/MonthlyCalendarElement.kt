@@ -6,7 +6,9 @@ import androidx.wear.protolayout.LayoutElementBuilders
 import androidx.wear.protolayout.ModifiersBuilders
 import androidx.wear.protolayout.material.Text
 import androidx.wear.protolayout.material.Typography
+import net.osdn.ja.gokigen.wearos.calendar.DbSingleton
 import net.osdn.ja.gokigen.wearos.calendar.R
+import net.osdn.ja.gokigen.wearos.calendar.storage.DataContent
 import java.util.Calendar
 
 class MonthlyCalendarElement(private val context: Context)
@@ -17,19 +19,33 @@ class MonthlyCalendarElement(private val context: Context)
     private val targetMonth = today[Calendar.MONTH] + 1
     private val targetDate = today[Calendar.DATE]
 
+    // 記念日の一覧
+    private val anniversaryList = ArrayList<DataContent>()
+
     // 表示する年と月
     private var year = targetYear
     private var month  = targetMonth
 
     init {
-        // ”指定された日" から、翌月の開始日を確認し、当日表示が最下行にくる場合は、翌月表示にする
-        if (checkIsShowNextMonth(targetYear, targetMonth, targetDate))
+        try
         {
-            // 翌月の表示にする
-            val calendar: Calendar = Calendar.getInstance()
-            calendar.set(year, targetMonth, 1)
-            year = calendar[Calendar.YEAR]
-            month = calendar[Calendar.MONTH] + 1
+            anniversaryList.clear()
+            anniversaryList.addAll(DbSingleton.db.storageDao().getContent(targetYear, targetMonth))
+
+            // ”指定された日" から、翌月の開始日を確認し、当日表示が最下行にくる場合は、翌月表示にする
+            if (checkIsShowNextMonth(targetYear, targetMonth, targetDate)) {
+                // 翌月の表示にする
+                val calendar: Calendar = Calendar.getInstance()
+                calendar.set(year, targetMonth, 1)
+                year = calendar[Calendar.YEAR]
+                month = calendar[Calendar.MONTH] + 1
+
+                anniversaryList.addAll(DbSingleton.db.storageDao().getContent(year, month))
+            }
+        }
+        catch (e: Exception)
+        {
+            e.printStackTrace()
         }
     }
 
@@ -59,6 +75,31 @@ class MonthlyCalendarElement(private val context: Context)
     }
     private fun getDayOfWeekColor(calendar: Calendar): Int
     {
+        try
+        {
+            // 記念日情報が登録されていた場合
+            val month = calendar[Calendar.MONTH] + 1
+            val date = calendar[Calendar.DATE]
+            for (dataContent in anniversaryList)
+            {
+                if ((dataContent.month == month)&&(dataContent.date == date))
+                {
+                    when (dataContent.attribute)
+                    {
+                        0 -> { } // Normal
+                        1 -> { return 0xFFCF6679.toInt() }  // Holiday
+                        2 -> { return 0xFF03DAC5.toInt() }  // Anniversary
+                        3 -> { return 0xFFEEFF41.toInt() }  // Notify
+                        4 -> { return 0xFFBB86FC.toInt() }  // Event
+                        5 -> { } // Other
+                    }
+                }
+            }
+        }
+        catch (e: Exception)
+        {
+            e.printStackTrace()
+        }
         return (when (calendar[Calendar.DAY_OF_WEEK]) {
                     Calendar.MONDAY -> 0xFFE6E6E6.toInt()
                     Calendar.TUESDAY -> 0xFFE6E6E6.toInt()
