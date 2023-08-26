@@ -10,11 +10,11 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.wear.compose.material.Text
+import net.osdn.ja.gokigen.wearos.calendar.presentation.theme.Amber500
 import net.osdn.ja.gokigen.wearos.calendar.presentation.theme.Purple200
 import net.osdn.ja.gokigen.wearos.calendar.presentation.theme.Red400
 import net.osdn.ja.gokigen.wearos.calendar.presentation.theme.Teal200
 import net.osdn.ja.gokigen.wearos.calendar.presentation.theme.White230
-import net.osdn.ja.gokigen.wearos.calendar.presentation.theme.White230_2
 import net.osdn.ja.gokigen.wearos.calendar.storage.DataContent
 
 @Composable
@@ -51,7 +51,7 @@ private fun decideFontColor(data: DataContent) : Color
         0 -> White230     // Normal
         1 -> Red400       // Holiday
         2 -> Teal200      // Anniversary
-        3 -> White230_2   // Notify
+        3 -> Amber500     // Notify
         4 -> Purple200    // Event
         else -> White230  // Other
     }

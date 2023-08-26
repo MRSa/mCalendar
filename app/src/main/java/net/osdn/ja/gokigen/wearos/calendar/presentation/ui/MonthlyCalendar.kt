@@ -55,10 +55,12 @@ import androidx.wear.compose.material.TimeTextDefaults
 import androidx.wear.compose.material.scrollAway
 import kotlinx.coroutines.launch
 import net.osdn.ja.gokigen.wearos.calendar.R
+import net.osdn.ja.gokigen.wearos.calendar.presentation.theme.Amber500
 import net.osdn.ja.gokigen.wearos.calendar.presentation.theme.Black000
 import net.osdn.ja.gokigen.wearos.calendar.presentation.theme.Black50
 import net.osdn.ja.gokigen.wearos.calendar.presentation.theme.Blue230
 import net.osdn.ja.gokigen.wearos.calendar.presentation.theme.MonthlyCalendarTheme
+import net.osdn.ja.gokigen.wearos.calendar.presentation.theme.Purple200
 import net.osdn.ja.gokigen.wearos.calendar.presentation.theme.Red400
 import net.osdn.ja.gokigen.wearos.calendar.presentation.theme.Teal200
 import net.osdn.ja.gokigen.wearos.calendar.presentation.theme.White230
@@ -210,12 +212,13 @@ fun MonthlyCalendar(initialYear: Int, initialMonth: Int, initialDate: Int, anniv
                                             White230  // 月～金
                                         }
                                     }
-                                    var foregroundColor = dateColor
+                                    // 背景色を行ごとに微妙に変える
                                     var backgroundColor = if ((index % 2) == 0) {
                                         Black50
                                     } else {
                                         Black000
                                     }
+                                    var foregroundColor = dateColor
                                     var fontWeight = FontWeight.Normal
                                     var textDecoration = TextDecoration.None
                                     val dayString = " %02d ".format(calendar[Calendar.DATE])
@@ -235,11 +238,13 @@ fun MonthlyCalendar(initialYear: Int, initialMonth: Int, initialDate: Int, anniv
                                         DateModification.NOTIFY -> {
                                             // 通知１ （取り消し線）
                                             textDecoration = TextDecoration.LineThrough
+                                            foregroundColor = Amber500
                                         }
 
                                         DateModification.EVENT -> {
                                             // 通知２ (アンダーライン）
                                             textDecoration = TextDecoration.Underline
+                                            foregroundColor = Purple200
                                         }
 
                                         DateModification.NORMAL -> {
