@@ -89,12 +89,24 @@ class MonthlyCalendarElement(private val context: Context)
         }
     }
 
-    private fun checkIsShowNextMonth(checkYear: Int, checkMonth: Int, checkDay: Int): Boolean {
-        // 指定された日が翌月１日と同じ週かどうか確認する
+    private fun checkIsShowNextMonth(checkYear: Int, checkMonth: Int, checkDay: Int): Boolean
+    {
+        // 次の月
         val calendar: Calendar = Calendar.getInstance()
-        calendar.set(checkYear, checkMonth, 1)
-        calendar.add(Calendar.DATE, getDayOfWeekIndex(calendar) * (-1))
-        return (checkDay >= calendar[Calendar.DATE])
+        calendar.set(checkYear, (checkMonth - 1), checkDay)  // チェック日付を取得
+        val lastDay = 6 - getDayOfWeekIndex(calendar)
+        if (lastDay == 0)
+        {
+            // 今日が土曜日の場合は、変えない
+            Log.v(TAG, " TODAY IS SATURDAY")
+            return (false)
+        }
+        calendar.add(Calendar.DATE, lastDay)
+        val saturdayMonth = calendar[Calendar.MONTH] + 1
+
+        Log.v(TAG, " check: $checkMonth-$checkDay  now: $saturdayMonth-${calendar[Calendar.DATE]}")
+
+        return (checkMonth != saturdayMonth)
     }
 
     private fun getDayOfWeekIndex(calendar: Calendar): Int {
