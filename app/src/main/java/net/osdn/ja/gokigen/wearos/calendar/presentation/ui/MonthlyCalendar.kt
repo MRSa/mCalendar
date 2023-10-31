@@ -283,7 +283,8 @@ fun MonthlyCalendar(initialYear: Int, initialMonth: Int, initialDate: Int, anniv
                         onClick = {
                             try {
                                 val calendar = Calendar.getInstance()
-                                calendar.set(year, month - 1, date)
+                                //calendar.set(year, month - 1, date)
+                                calendar.set(year, month - 1, 1)
                                 calendar.add(Calendar.MONTH, -1)
                                 month = calendar[Calendar.MONTH] + 1
                                 year = calendar[Calendar.YEAR]
@@ -356,7 +357,8 @@ fun MonthlyCalendar(initialYear: Int, initialMonth: Int, initialDate: Int, anniv
                         onClick = {
                             try {
                                 val calendar = Calendar.getInstance()
-                                calendar.set(year, month - 1, date)
+                                //calendar.set(year, month - 1, date)
+                                calendar.set(year, month - 1, 1)
                                 calendar.add(Calendar.MONTH, 1)
                                 month = calendar[Calendar.MONTH] + 1
                                 year = calendar[Calendar.YEAR]
