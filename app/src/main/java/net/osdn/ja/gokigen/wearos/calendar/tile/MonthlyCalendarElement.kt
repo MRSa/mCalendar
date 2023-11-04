@@ -3,7 +3,9 @@ package net.osdn.ja.gokigen.wearos.calendar.tile
 import android.content.Context
 import android.util.Log
 import androidx.wear.protolayout.ColorBuilders
+import androidx.wear.protolayout.DimensionBuilders
 import androidx.wear.protolayout.LayoutElementBuilders
+import androidx.wear.protolayout.LayoutElementBuilders.VERTICAL_ALIGN_CENTER
 import androidx.wear.protolayout.ModifiersBuilders
 import androidx.wear.protolayout.material.Text
 import androidx.wear.protolayout.material.Typography
@@ -171,10 +173,32 @@ class MonthlyCalendarElement(private val context: Context)
         })
     }
 
-    private fun drawDayOfWeekTitle(clickable: ModifiersBuilders.Clickable): LayoutElementBuilders.LayoutElement
+
+    private fun drawDayOfWeekTitle(clickable: ModifiersBuilders.Clickable, fontScale: Float): LayoutElementBuilders.LayoutElement
     {
         val backColor = 0xFF000000.toInt()
         val row = LayoutElementBuilders.Row.Builder()
+        row.setWidth(
+/**/
+            DimensionBuilders.WrappedDimensionProp.Builder()
+                .setMinimumSize(
+                    DimensionBuilders.DpProp.Builder(10.0f)
+                        .setValue(10.0f)
+                        .build()
+                )
+                .build()
+/**/
+/*
+            DimensionBuilders.ExpandedDimensionProp.Builder()
+                .setLayoutWeight(
+                    TypeBuilders.FloatProp.Builder(1.0f)
+                        .setValue(1.0f)
+                        .build()
+                )
+                .build()
+*/
+        )
+        row.setVerticalAlignment(VERTICAL_ALIGN_CENTER)
         row.setModifiers(
             ModifiersBuilders.Modifiers.Builder()
                 .setClickable(clickable)
@@ -183,65 +207,110 @@ class MonthlyCalendarElement(private val context: Context)
                         .setColor(ColorBuilders.ColorProp.Builder(backColor).build())
                         .build()
                 )
+                .setPadding(
+                    ModifiersBuilders.Padding.Builder()
+                        .setStart(
+                            DimensionBuilders.DpProp.Builder(0.0f)
+                                .setValue(5.0f)
+                                .build()
+                        )
+                        .setEnd(
+                            DimensionBuilders.DpProp.Builder(0.0f)
+                                .setValue(5.0f)
+                                .build()
+                        )
+                        .build()
+                )
                 .build()
         )
         row.addContent(
-            getTextContent(
+            getTextContentTitle(
                 clickable,
                 context.getString(R.string.label_sunday) + " ",
                 0xFFCF6679.toInt(),
-                backColor
+                fontScale,
             )
         )
         row.addContent(
-            getTextContent(
+            getTextContentTitle(
                 clickable,
                 context.getString(R.string.label_monday) + " ",
                 0xFFE6E6E6.toInt(),
-                backColor
+                fontScale,
             )
         )
         row.addContent(
-            getTextContent(
+            getTextContentTitle(
                 clickable,
                 context.getString(R.string.label_tuesday) + " ",
                 0xFFE6E6E6.toInt(),
-                backColor
+                fontScale,
             )
         )
         row.addContent(
-            getTextContent(
+            getTextContentTitle(
                 clickable,
                 context.getString(R.string.label_wednesday) + " ",
                 0xFFE6C6E6.toInt(),
-                backColor
+                fontScale,
             )
         )
         row.addContent(
-            getTextContent(
+            getTextContentTitle(
                 clickable,
                 context.getString(R.string.label_thursday) + " ",
                 0xFFE6E6E6.toInt(),
-                backColor
+                fontScale,
             )
         )
         row.addContent(
-            getTextContent(
+            getTextContentTitle(
                 clickable,
                 context.getString(R.string.label_friday) + " ",
                 0xFFE6E6E6.toInt(),
-                backColor
+                fontScale,
             )
         )
         row.addContent(
-            getTextContent(
+            getTextContentTitle(
                 clickable,
                 context.getString(R.string.label_saturday) + " ",
                 0xFF85BADE.toInt(),
-                backColor
+                fontScale,
             )
         )
         return (row.build())
+    }
+
+    private fun getTextContentTitle(
+        clickable: ModifiersBuilders.Clickable,
+        label: String,
+        foreColor: Int,
+        fontScale: Float
+    ): LayoutElementBuilders.LayoutElement
+    {
+        val backColor = 0xFF000000.toInt()
+
+        // フォントサイズがでかい時には、曜日のラベルが見切れないようにする
+        // val typography = if (fontScale > 1.09f) { Typography.TYPOGRAPHY_CAPTION3 } else { Typography.TYPOGRAPHY_CAPTION2 }
+        // val typography = if (fontScale > 1.20f) { Typography.TYPOGRAPHY_CAPTION3 } else { Typography.TYPOGRAPHY_CAPTION2 }
+        val typography = if (fontScale > 1.15f) { Typography.TYPOGRAPHY_CAPTION3 } else { Typography.TYPOGRAPHY_CAPTION2 }
+
+
+        return (Text.Builder(context, label)
+            .setModifiers(
+                ModifiersBuilders.Modifiers.Builder()
+                    .setClickable(clickable)
+                    .setBackground(
+                        ModifiersBuilders.Background.Builder()
+                            .setColor(ColorBuilders.ColorProp.Builder(backColor).build())
+                            .build()
+                    )
+                    .build()
+            )
+            .setColor(ColorBuilders.ColorProp.Builder(foreColor).build())
+            .setTypography(typography)
+            .build())
     }
 
     private fun getTextContent(
@@ -267,12 +336,35 @@ class MonthlyCalendarElement(private val context: Context)
             .build())
     }
 
-    fun getMonthlyCalendarLayout(clickable: ModifiersBuilders.Clickable): LayoutElementBuilders.LayoutElement
+    fun getMonthlyCalendarLayout(clickable: ModifiersBuilders.Clickable, fontScale: Float): LayoutElementBuilders.LayoutElement
     {
         val column = LayoutElementBuilders.Column.Builder()
 
+/*
+        if (fontScale > 1.09f)
+        {
+            // フォント表示サイズがでかい時には paddingサイズを調整する
+            column.setModifiers(
+                ModifiersBuilders.Modifiers.Builder()
+                    .setPadding(
+                        ModifiersBuilders.Padding.Builder()
+                            .setStart(
+                                DimensionBuilders.DpProp.Builder(0.0f)
+                                    .setValue(2.0f)
+                                    .build()
+                            )
+                            .setEnd(
+                                DimensionBuilders.DpProp.Builder(0.0f)
+                                    .setValue(2.0f)
+                                    .build()
+                            )
+                            .build())
+                    .build()
+            )
+        }
+*/
         // タイトルを入れる
-        column.addContent(drawDayOfWeekTitle(clickable))
+        column.addContent(drawDayOfWeekTitle(clickable, fontScale))
 
         val calendar: Calendar = Calendar.getInstance()
         calendar.set(year, (month - 1), 1)
@@ -311,7 +403,7 @@ class MonthlyCalendarElement(private val context: Context)
                         clickable,
                         dayString,
                         foregroundColor,
-                        backgroundColor
+                        backgroundColor,
                     )
                 )
                 calendar.add(Calendar.DATE, 1)

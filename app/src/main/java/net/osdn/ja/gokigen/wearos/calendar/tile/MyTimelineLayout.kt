@@ -37,6 +37,24 @@ class MyTimelineLayout
 
         // 月間カレンダーのレイアウトを表示する
         val monthlyCalendarLayout = MonthlyCalendarElement(context)
+
+        // フォントサイズがどうなっているか知る (0.94 / 1.00 / 1.06 / 1.12 / 1.18 / 1.24 )
+        val fontScale: Float = context.resources.configuration.fontScale
+        // Log.v("TAG", " - - - - - - - - - fontScale : $fontScale")
+
+        if (fontScale > 1.09f)
+        {
+            //  フォントスケールが大きい場合には、年-月の表示を省略して画面内に収めるよう調整する
+            return (
+                    PrimaryLayout.Builder(deviceParameters)
+                        .setPrimaryLabelTextContent(
+                            // CONTENT
+                            monthlyCalendarLayout.getMonthlyCalendarLayout(clickable = launchActivity, fontScale = fontScale)
+                        )
+                        .setVerticalSpacerHeight(0.15f)
+                        .build()
+                    )
+        }
         return (
                 PrimaryLayout.Builder(deviceParameters)
                     .setPrimaryLabelTextContent(
@@ -45,8 +63,9 @@ class MyTimelineLayout
                     )
                     .setSecondaryLabelTextContent(
                         // CONTENT
-                        monthlyCalendarLayout.getMonthlyCalendarLayout(clickable = launchActivity)
+                        monthlyCalendarLayout.getMonthlyCalendarLayout(clickable = launchActivity, fontScale = fontScale)
                     )
+                    .setVerticalSpacerHeight(0.5f)
                     .build()
                 )
     }
@@ -64,6 +83,7 @@ fun TilePreview()
 {
     val deviceParameters = DeviceParametersBuilders.DeviceParameters.Builder().build()  // ダミー
     val clickable = ModifiersBuilders.Clickable.Builder().build()  // ダミー
+    val fontScale = 1.0f  // ダミー
     val monthlyCalendarLayout = MonthlyCalendarElement(LocalContext.current)
     val timeline = PrimaryLayout.Builder(deviceParameters)
         .setPrimaryLabelTextContent(
@@ -72,7 +92,7 @@ fun TilePreview()
         )
         .setSecondaryLabelTextContent(
             // CONTENT
-            monthlyCalendarLayout.getMonthlyCalendarLayout(clickable)
+            monthlyCalendarLayout.getMonthlyCalendarLayout(clickable, fontScale)
         )
         .build()
     LayoutRootPreview(root = timeline)

@@ -115,7 +115,7 @@ fun MonthlyCalendar(initialYear: Int, initialMonth: Int, initialDate: Int, anniv
                     }
                     .fillMaxWidth()
                     .verticalScroll(scrollState)
-                    .padding(horizontal = horizontalPadding, vertical = 20.dp)
+                    .padding(horizontal = horizontalPadding, vertical = 26.dp)  // 20.dp -> 26.dp
                     .focusRequester(focusRequester)
                     .focusable(),
                 verticalArrangement = Arrangement.Top,
