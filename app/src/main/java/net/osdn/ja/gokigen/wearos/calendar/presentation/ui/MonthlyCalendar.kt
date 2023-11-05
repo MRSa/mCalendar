@@ -83,7 +83,7 @@ fun MonthlyCalendar(initialYear: Int, initialMonth: Int, initialDate: Int, anniv
         val anniversaryList = remember { anniversaryProvider.dateList }
         val focusRequester = remember { FocusRequester() }
         val coroutineScope = rememberCoroutineScope()
-        val scrollState = rememberScrollState()
+        val scrollState = rememberScrollState(0)
 
         val yearMonthSize = 16.sp
         val dateSize = 13.sp
@@ -402,7 +402,9 @@ fun MonthlyCalendar(initialYear: Int, initialMonth: Int, initialDate: Int, anniv
                 }
             }
         }
-        LaunchedEffect(Unit) { focusRequester.requestFocus() }
+        LaunchedEffect(Unit) {
+            focusRequester.requestFocus()
+        }
     }
 }
 
