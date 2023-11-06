@@ -5,6 +5,7 @@ import android.os.VibrationEffect.DEFAULT_AMPLITUDE
 import android.os.Vibrator
 import android.text.format.DateFormat
 import android.util.Log
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.focusable
 import androidx.compose.foundation.gestures.scrollBy
@@ -18,7 +19,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
@@ -54,6 +54,7 @@ import androidx.wear.compose.material.Text
 import androidx.wear.compose.material.TimeText
 import androidx.wear.compose.material.TimeTextDefaults
 import androidx.wear.compose.material.scrollAway
+import androidx.wear.tooling.preview.devices.WearDevices
 import kotlinx.coroutines.launch
 import net.osdn.ja.gokigen.wearos.calendar.R
 import net.osdn.ja.gokigen.wearos.calendar.presentation.theme.Amber500
@@ -83,7 +84,8 @@ fun MonthlyCalendar(initialYear: Int, initialMonth: Int, initialDate: Int, anniv
         val anniversaryList = remember { anniversaryProvider.dateList }
         val focusRequester = remember { FocusRequester() }
         val coroutineScope = rememberCoroutineScope()
-        val scrollState = rememberScrollState(0)
+        val myState = MyPositionIndicatorState(scrollState = ScrollState(0))
+        val myScrollState = remember { myState.scrollState }
 
         val yearMonthSize = 16.sp
         val dateSize = 13.sp
@@ -99,23 +101,32 @@ fun MonthlyCalendar(initialYear: Int, initialMonth: Int, initialDate: Int, anniv
                             "HH:mm"
                         )
                     ),
-                    modifier = Modifier.scrollAway(scrollState = scrollState)
+                    modifier = Modifier.scrollAway(scrollState = myScrollState)
                  )
             },
             positionIndicator = {
-                PositionIndicator(scrollState = scrollState)
+                PositionIndicator(
+                    state = myState,
+                    indicatorHeight = 50.dp,
+                    indicatorWidth = 4.dp,
+                    paddingHorizontal = 5.dp,
+                    showFadeInAnimation = false,
+                    showFadeOutAnimation = false,
+                    showPositionAnimation = true,
+                )
             },
         ) {
             Column(
                 modifier = Modifier
                     .onRotaryScrollEvent {
                         coroutineScope.launch {
-                            scrollState.scrollBy(it.verticalScrollPixels)
+                            Log.v("TEST", "Pixels: ${it.verticalScrollPixels}")
+                            myScrollState.scrollBy(it.verticalScrollPixels)
                         }
                         true
                     }
                     .fillMaxWidth()
-                    .verticalScroll(scrollState)
+                    .verticalScroll(myScrollState)
                     .padding(horizontal = horizontalPadding, vertical = 26.dp)  // 20.dp -> 26.dp
                     .focusRequester(focusRequester)
                     .focusable(),
@@ -424,7 +435,7 @@ private fun getDayOfWeekIndex(calendar: Calendar): Int
     return (week)
 }
 
-@Preview(device = Devices.WEAR_OS_SMALL_ROUND, showSystemUi = true)
+@Preview(device = WearDevices.SMALL_ROUND, showSystemUi = true) // Devices.WEAR_OS_SMALL_ROUND, showSystemUi = true)
 @Composable
 fun DefaultPreview() {
     val calendar = Calendar.getInstance()

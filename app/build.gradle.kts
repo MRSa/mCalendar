@@ -12,8 +12,8 @@ android {
         applicationId = "net.osdn.ja.gokigen.wearos.calendar"
         minSdk = 26
         targetSdk = 33
-        versionCode = 100104
-        versionName = "1.1.4"
+        versionCode = 100105
+        versionName = "1.1.5"
         vectorDrawables {
             useSupportLibrary = true
         }
@@ -69,13 +69,17 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
 
     implementation("androidx.activity:activity-compose:1.8.0")
+    implementation("androidx.wear:wear-tooling-preview:1.0.0-beta01")
 
     val composeVersion = "2023.08.00"
     implementation(platform("androidx.compose:compose-bom:$composeVersion"))
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.ui:ui-tooling-preview")
 
-    val wearComposeVersion = "1.2.1"
+    // val wearComposeVersion = "1.1.2"
+    // val wearComposeVersion = "1.2.0"
+    // val wearComposeVersion = "1.2.1"
+    val wearComposeVersion = "1.3.0-alpha08"
     implementation("androidx.wear.compose:compose-foundation:$wearComposeVersion")
     implementation("androidx.wear.compose:compose-material:$wearComposeVersion")
 
@@ -87,8 +91,8 @@ dependencies {
     implementation("com.google.android.horologist:horologist-compose-tools:$horologistVersion")
     implementation("com.google.android.horologist:horologist-tiles:$horologistVersion")
 
-    val room_version = "2.6.0"
-    implementation("androidx.room:room-runtime:$room_version")
-    annotationProcessor("androidx.room:room-compiler:$room_version")
-    ksp("androidx.room:room-compiler:$room_version")
+    val roomVersion = "2.6.0"
+    implementation("androidx.room:room-runtime:$roomVersion")
+    annotationProcessor("androidx.room:room-compiler:$roomVersion")
+    ksp("androidx.room:room-compiler:$roomVersion")
 }
