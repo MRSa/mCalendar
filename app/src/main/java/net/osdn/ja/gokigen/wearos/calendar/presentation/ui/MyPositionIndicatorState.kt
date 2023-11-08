@@ -25,7 +25,12 @@ class MyPositionIndicatorState(var scrollState: ScrollState) : PositionIndicator
             scrollableContainerSizePx / (scrollableContainerSizePx + scrollState.maxValue)
         }
 
-    override fun visibility(scrollableContainerSizePx: Float): PositionIndicatorVisibility {
+    override fun visibility(scrollableContainerSizePx: Float): PositionIndicatorVisibility
+    {
+        if (scrollState.maxValue == 0)
+        {
+            return (PositionIndicatorVisibility.Hide)
+        }
         return (PositionIndicatorVisibility.Show)
     }
 

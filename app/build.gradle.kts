@@ -12,8 +12,8 @@ android {
         applicationId = "net.osdn.ja.gokigen.wearos.calendar"
         minSdk = 26
         targetSdk = 33
-        versionCode = 100105
-        versionName = "1.1.5"
+        versionCode = 100107
+        versionName = "1.1.7"
         vectorDrawables {
             useSupportLibrary = true
         }
@@ -76,8 +76,6 @@ dependencies {
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.ui:ui-tooling-preview")
 
-    // val wearComposeVersion = "1.1.2"
-    // val wearComposeVersion = "1.2.0"
     // val wearComposeVersion = "1.2.1"
     val wearComposeVersion = "1.3.0-alpha08"
     implementation("androidx.wear.compose:compose-foundation:$wearComposeVersion")

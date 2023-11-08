@@ -40,7 +40,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
-import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -107,8 +106,8 @@ fun MonthlyCalendar(initialYear: Int, initialMonth: Int, initialDate: Int, anniv
             positionIndicator = {
                 PositionIndicator(
                     state = myState,
-                    indicatorHeight = 50.dp,
-                    indicatorWidth = 4.dp,
+                    indicatorHeight = 80.dp,
+                    indicatorWidth = 5.dp,
                     paddingHorizontal = 5.dp,
                     showFadeInAnimation = false,
                     showFadeOutAnimation = false,
@@ -120,14 +119,14 @@ fun MonthlyCalendar(initialYear: Int, initialMonth: Int, initialDate: Int, anniv
                 modifier = Modifier
                     .onRotaryScrollEvent {
                         coroutineScope.launch {
-                            Log.v("TEST", "Pixels: ${it.verticalScrollPixels}")
+                            //Log.v("TEST", "Pixels: ${it.verticalScrollPixels}")
                             myScrollState.scrollBy(it.verticalScrollPixels)
                         }
                         true
                     }
                     .fillMaxWidth()
                     .verticalScroll(myScrollState)
-                    .padding(horizontal = horizontalPadding, vertical = 26.dp)  // 20.dp -> 26.dp
+                    .padding(horizontal = horizontalPadding, vertical = 28.dp)  // 20.dp -> 26.dp
                     .focusRequester(focusRequester)
                     .focusable(),
                 verticalArrangement = Arrangement.Top,

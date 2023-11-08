@@ -3,7 +3,6 @@ package net.osdn.ja.gokigen.wearos.calendar.tile
 import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.wear.protolayout.ActionBuilders
 import androidx.wear.protolayout.DeviceParametersBuilders
@@ -11,6 +10,7 @@ import androidx.wear.protolayout.LayoutElementBuilders
 import androidx.wear.protolayout.ModifiersBuilders
 import androidx.wear.protolayout.material.layouts.PrimaryLayout
 import androidx.wear.tiles.RequestBuilders
+import androidx.wear.tooling.preview.devices.WearDevices
 import com.google.android.horologist.compose.tools.LayoutRootPreview
 
 class MyTimelineLayout
@@ -72,7 +72,7 @@ class MyTimelineLayout
 }
 
 @Preview(
-    device = Devices.WEAR_OS_SMALL_ROUND,
+    device = WearDevices.SMALL_ROUND,
     showSystemUi = true,
     backgroundColor = 0xff000000,
     showBackground = true
