@@ -4,8 +4,10 @@ import androidx.compose.foundation.ScrollState
 import androidx.wear.compose.material.PositionIndicatorState
 import androidx.wear.compose.material.PositionIndicatorVisibility
 
-class MyPositionIndicatorState(var scrollState: ScrollState) : PositionIndicatorState
+class MyPositionIndicatorState() : PositionIndicatorState
 {
+    var scrollState = ScrollState(0)
+
     override val positionFraction: Float
         get() {
             return if (scrollState.maxValue == 0) {

@@ -5,7 +5,6 @@ import android.os.VibrationEffect.DEFAULT_AMPLITUDE
 import android.os.Vibrator
 import android.text.format.DateFormat
 import android.util.Log
-import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.focusable
 import androidx.compose.foundation.gestures.scrollBy
@@ -83,8 +82,8 @@ fun MonthlyCalendar(initialYear: Int, initialMonth: Int, initialDate: Int, anniv
         val anniversaryList = remember { anniversaryProvider.dateList }
         val focusRequester = remember { FocusRequester() }
         val coroutineScope = rememberCoroutineScope()
-        val myState = MyPositionIndicatorState(scrollState = ScrollState(0))
-        val myScrollState = remember { myState.scrollState }
+        val myState = remember { MyPositionIndicatorState() }
+        val myScrollState = myState.scrollState // remember { myState.scrollState }
 
         val yearMonthSize = 16.sp
         val dateSize = 13.sp
@@ -106,14 +105,18 @@ fun MonthlyCalendar(initialYear: Int, initialMonth: Int, initialDate: Int, anniv
             positionIndicator = {
                 PositionIndicator(
                     state = myState,
-                    indicatorHeight = 80.dp,
+                    indicatorHeight = 45.dp,
                     indicatorWidth = 5.dp,
                     paddingHorizontal = 5.dp,
-                    showFadeInAnimation = false,
-                    showFadeOutAnimation = false,
-                    showPositionAnimation = true,
+                    //showFadeInAnimation = false,
+                    //showFadeOutAnimation = false,
+                    //showPositionAnimation = true,
                 )
             },
+            modifier = Modifier
+                .background(
+                    color = Black000
+                )
         ) {
             Column(
                 modifier = Modifier
@@ -299,7 +302,7 @@ fun MonthlyCalendar(initialYear: Int, initialMonth: Int, initialDate: Int, anniv
                                 calendar.add(Calendar.MONTH, -1)
                                 month = calendar[Calendar.MONTH] + 1
                                 year = calendar[Calendar.YEAR]
-                                Log.d("Button(Previous)", "onClick $year-$month-$date")
+                                Log.d("Button(Previous)", "onClick $year-$month-$date : ${myScrollState.value}")
                                 anniversaryProvider.update(calendar)
                                 vibrator?.vibrate(
                                     VibrationEffect.createOneShot(
@@ -335,7 +338,7 @@ fun MonthlyCalendar(initialYear: Int, initialMonth: Int, initialDate: Int, anniv
                                 year = calendar[Calendar.YEAR]
                                 month = calendar[Calendar.MONTH] + 1
                                 date = calendar[Calendar.DATE]
-                                Log.d("Button(Today)", "onClick  $year-$month-$date")
+                                Log.d("Button(Today)", "onClick  $year-$month-$date : ${myScrollState.value}")
                                 anniversaryProvider.update(calendar)
                                 vibrator?.vibrate(
                                     VibrationEffect.createOneShot(
@@ -373,7 +376,7 @@ fun MonthlyCalendar(initialYear: Int, initialMonth: Int, initialDate: Int, anniv
                                 calendar.add(Calendar.MONTH, 1)
                                 month = calendar[Calendar.MONTH] + 1
                                 year = calendar[Calendar.YEAR]
-                                Log.d("Button(Next)", "onClick  $year-$month-$date")
+                                Log.d("Button(Next)", "onClick  $year-$month-$date : ${myScrollState.value}")
                                 anniversaryProvider.update(calendar)
                                 vibrator?.vibrate(
                                     VibrationEffect.createOneShot(
@@ -414,6 +417,7 @@ fun MonthlyCalendar(initialYear: Int, initialMonth: Int, initialDate: Int, anniv
         }
         LaunchedEffect(Unit) {
             focusRequester.requestFocus()
+            // Log.d("LaunchedEffect", " : ${myScrollState.value}")
         }
     }
 }
