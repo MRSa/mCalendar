@@ -269,9 +269,10 @@ fun MonthlyCalendar(initialYear: Int, initialMonth: Int, initialDate: Int, anniv
 
                                     if ((currentDate == calendar[Calendar.DATE]) && (currentMonth - 1 == calendar[Calendar.MONTH]) && (currentYear == calendar[Calendar.YEAR])) {
                                         // "今日" だった場合は、色を反転させる
+                                        val keepForegroundColor = foregroundColor
                                         fontWeight = FontWeight.Bold
                                         foregroundColor = backgroundColor
-                                        backgroundColor = dateColor
+                                        backgroundColor = keepForegroundColor
                                     }
 
                                     // テキスト表示

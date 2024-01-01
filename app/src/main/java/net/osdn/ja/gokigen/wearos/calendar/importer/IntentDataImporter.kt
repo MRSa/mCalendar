@@ -160,33 +160,39 @@ class IntentDataImporter(private val context: Context, val intent: Intent)
         {
             if ((lineData.contains("delete all"))&&(lineData.contains("confirm")))
             {
-                if (lineData.contains("only holiday"))
+                if (lineData.contains("only"))
                 {
-                    // 休日のみ削除
-                    outputDebugLog("DELETE ALL HOLIDAY DATA")
-                    storageDao.deleteAllAttribute(1)
-                    return (true)
+                    if (lineData.contains("holiday"))
+                    {
+                        // 休日のみ削除
+                        outputDebugLog("DELETE ALL ONLY HOLIDAY DATA")
+                        storageDao.deleteAllAttribute(1)
+                        return (true)
+                    }
+                    if (lineData.contains("anniversary"))
+                    {
+                        // 記念日のみ削除
+                        outputDebugLog("DELETE ALL ONLY ANNIVERSARY DATA")
+                        storageDao.deleteAllAttribute(2)
+                        return (true)
+                    }
+                    if (lineData.contains("notify"))
+                    {
+                        //　通知１のみ削除
+                        outputDebugLog("DELETE ALL ONLY NOTIFY DATA")
+                        storageDao.deleteAllAttribute(3)
+                        return (true)
+                    }
+                    if (lineData.contains("event"))
+                    {
+                        // 通知２のみ削除
+                        outputDebugLog("DELETE ALL ONLY EVENT DATA")
+                        storageDao.deleteAllAttribute(4)
+                        return (true)
+                    }
+                    // 検出できなかった場合は、全件削除
                 }
-                if (lineData.contains("only anniversary"))
-                {
-                    outputDebugLog("DELETE ALL ANNIVERSARY DATA")
-                    storageDao.deleteAllAttribute(2)
-                    return (true)
-                }
-                if (lineData.contains("only notify"))
-                {
-                    outputDebugLog("DELETE ALL NOTIFY DATA")
-                    storageDao.deleteAllAttribute(3)
-                    return (true)
-                }
-                if (lineData.contains("only event"))
-                {
-                    outputDebugLog("DELETE ALL EVENT DATA")
-                    storageDao.deleteAllAttribute(4)
-                    return (true)
-                }
-
-                // データを全権削除
+                // データを全件削除
                 outputDebugLog("DELETE ALL DATA")
                 storageDao.deleteAll()
                 return (true)
