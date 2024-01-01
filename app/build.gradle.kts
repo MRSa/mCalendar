@@ -68,8 +68,8 @@ dependencies {
     implementation("androidx.recyclerview:recyclerview:1.3.2")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
 
-    implementation("androidx.activity:activity-compose:1.8.0")
-    implementation("androidx.wear:wear-tooling-preview:1.0.0-beta01")
+    implementation("androidx.activity:activity-compose:1.8.2")
+    implementation("androidx.wear:wear-tooling-preview:1.0.0")
 
     val composeVersion = "2023.08.00"
     implementation(platform("androidx.compose:compose-bom:$composeVersion"))
@@ -90,7 +90,7 @@ dependencies {
     implementation("com.google.android.horologist:horologist-compose-tools:$horologistVersion")
     implementation("com.google.android.horologist:horologist-tiles:$horologistVersion")
 
-    val roomVersion = "2.6.0"
+    val roomVersion = "2.6.1"
     implementation("androidx.room:room-runtime:$roomVersion")
     annotationProcessor("androidx.room:room-compiler:$roomVersion")
     ksp("androidx.room:room-compiler:$roomVersion")
