@@ -37,6 +37,7 @@
         <activity
             android:name=".presentation.MainActivity"
             android:exported="true"
+            android:taskAffinity=""
             android:theme="@style/Theme.GokigenSplash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
