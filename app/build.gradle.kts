@@ -66,23 +66,24 @@ dependencies {
     implementation("androidx.percentlayout:percentlayout:1.0.0")
     implementation("androidx.legacy:legacy-support-v4:1.0.0")
     implementation("androidx.recyclerview:recyclerview:1.3.2")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
 
     implementation("androidx.activity:activity-compose:1.8.2")
     implementation("androidx.wear:wear-tooling-preview:1.0.0")
 
-    val composeVersion = "2023.08.00"
+    //val composeVersion = "2023.08.00"
+    val composeVersion = "2024.02.02"
     implementation(platform("androidx.compose:compose-bom:$composeVersion"))
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.ui:ui-tooling-preview")
 
-    val wearComposeVersion = "1.2.1"
-    //val wearComposeVersion = "1.3.0-alpha08"
-    //val wearComposeVersion = "1.0.1"
+    //val wearComposeVersion = "1.2.1"
+    val wearComposeVersion = "1.3.0"
     implementation("androidx.wear.compose:compose-foundation:$wearComposeVersion")
     implementation("androidx.wear.compose:compose-material:$wearComposeVersion")
 
-    val tilesVersion = "1.2.0"
+    //val tilesVersion = "1.2.0"
+    val tilesVersion = "1.3.0"
     implementation("androidx.wear.tiles:tiles:$tilesVersion")
     implementation("androidx.wear.tiles:tiles-material:$tilesVersion")
 
