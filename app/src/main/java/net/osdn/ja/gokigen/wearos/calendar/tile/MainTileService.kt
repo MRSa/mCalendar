@@ -28,6 +28,7 @@ class MainTileService: SuspendingTileService()
         ).build())
         return TileBuilders.Tile.Builder().setResourcesVersion(RESOURCES_VERSION)
             .setTileTimeline(singleTileTimeline.build())
+            .setFreshnessIntervalMillis(60 * 60 * 1000) // refreshes every 60 minutes
             .build()
     }
 }
