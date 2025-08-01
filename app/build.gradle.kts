@@ -3,6 +3,7 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("com.google.devtools.ksp")
     id("org.jetbrains.kotlin.plugin.compose") version "2.2.0"
+    id("androidx.room") version "2.7.2" apply false
 }
 
 android {
@@ -18,14 +19,14 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
-        javaCompileOptions {
-            annotationProcessorOptions {
-                arguments += mapOf(
-                    "room.schemaLocation" to "$projectDir/schemas",
-                    "room.incremental" to "true"
-                )
-            }
-        }
+        //javaCompileOptions {
+        //    annotationProcessorOptions {
+        //        arguments += mapOf(
+        //            "room.schemaLocation" to "$projectDir/schemas",
+        //            "room.incremental" to "true"
+        //        )
+        //    }
+        //}
         ksp {
             arg("room.schemaLocation", "$projectDir/schemas")
         }
@@ -63,8 +64,8 @@ android {
 dependencies {
     implementation("androidx.core:core-splashscreen:1.0.1")
     implementation("androidx.core:core-ktx:1.16.0")
-    implementation("androidx.percentlayout:percentlayout:1.0.0")
-    implementation("androidx.legacy:legacy-support-v4:1.0.0")
+    //implementation("androidx.percentlayout:percentlayout:1.0.0")
+    //implementation("androidx.legacy:legacy-support-v4:1.0.0")
     implementation("androidx.recyclerview:recyclerview:1.4.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.9.2")
 
@@ -89,6 +90,6 @@ dependencies {
 
     val roomVersion = "2.7.2"
     implementation("androidx.room:room-runtime:$roomVersion")
-    annotationProcessor("androidx.room:room-compiler:$roomVersion")
+    //annotationProcessor("androidx.room:room-compiler:$roomVersion")
     ksp("androidx.room:room-compiler:$roomVersion")
 }
