@@ -3,7 +3,7 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("com.google.devtools.ksp")
     id("org.jetbrains.kotlin.plugin.compose") version "2.2.0"
-    id("androidx.room") version "2.7.2" apply false
+    id("androidx.room")
 }
 
 android {
@@ -18,17 +18,6 @@ android {
         versionName = "1.1.10"
         vectorDrawables {
             useSupportLibrary = true
-        }
-        //javaCompileOptions {
-        //    annotationProcessorOptions {
-        //        arguments += mapOf(
-        //            "room.schemaLocation" to "$projectDir/schemas",
-        //            "room.incremental" to "true"
-        //        )
-        //    }
-        //}
-        ksp {
-            arg("room.schemaLocation", "$projectDir/schemas")
         }
     }
 
@@ -45,15 +34,9 @@ android {
         sourceCompatibility = JavaVersion.VERSION_21
         targetCompatibility = JavaVersion.VERSION_21
     }
-    kotlinOptions {
-        jvmTarget = "21"
-    }
     buildFeatures {
         compose = true
     }
-    //composeOptions {
-    //    kotlinCompilerExtensionVersion = "1.5.3"
-    //}
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
@@ -61,11 +44,19 @@ android {
     }
 }
 
+kotlin {
+    compilerOptions {
+        jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_21)
+    }
+}
+
+room {
+    schemaDirectory("$projectDir/schemas")
+}
+
 dependencies {
     implementation("androidx.core:core-splashscreen:1.0.1")
     implementation("androidx.core:core-ktx:1.16.0")
-    //implementation("androidx.percentlayout:percentlayout:1.0.0")
-    //implementation("androidx.legacy:legacy-support-v4:1.0.0")
     implementation("androidx.recyclerview:recyclerview:1.4.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.9.2")
 
@@ -90,6 +81,5 @@ dependencies {
 
     val roomVersion = "2.7.2"
     implementation("androidx.room:room-runtime:$roomVersion")
-    //annotationProcessor("androidx.room:room-compiler:$roomVersion")
     ksp("androidx.room:room-compiler:$roomVersion")
 }
