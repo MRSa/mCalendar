@@ -61,7 +61,7 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.9.2")
 
     implementation("androidx.activity:activity-compose:1.10.1")
-    implementation("androidx.wear:wear-tooling-preview:1.0.0")
+    //implementation("androidx.wear:wear-tooling-preview:1.0.0")
 
     val composeVersion = "2025.07.00"
     implementation(platform("androidx.compose:compose-bom:$composeVersion"))
@@ -75,6 +75,7 @@ dependencies {
     val tilesVersion = "1.5.0"
     implementation("androidx.wear.tiles:tiles:$tilesVersion")
     implementation("androidx.wear.tiles:tiles-material:$tilesVersion")
+    implementation("androidx.wear.tiles:tiles-tooling-preview:$tilesVersion")
 
     implementation("com.google.android.horologist:horologist-compose-tools:0.6.23")
     implementation("com.google.android.horologist:horologist-tiles:0.7.15")
