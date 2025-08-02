@@ -167,35 +167,35 @@ class IntentDataImporter(private val context: Context, val intent: Intent)
                         // 休日のみ削除
                         outputDebugLog("DELETE ALL ONLY HOLIDAY DATA")
                         storageDao.deleteAllAttribute(1)
-                        return (true)
+                        return true
                     }
                     if (lineData.contains("anniversary"))
                     {
                         // 記念日のみ削除
                         outputDebugLog("DELETE ALL ONLY ANNIVERSARY DATA")
                         storageDao.deleteAllAttribute(2)
-                        return (true)
+                        return true
                     }
                     if (lineData.contains("notify"))
                     {
                         //　通知１のみ削除
                         outputDebugLog("DELETE ALL ONLY NOTIFY DATA")
                         storageDao.deleteAllAttribute(3)
-                        return (true)
+                        return true
                     }
                     if (lineData.contains("event"))
                     {
                         // 通知２のみ削除
                         outputDebugLog("DELETE ALL ONLY EVENT DATA")
                         storageDao.deleteAllAttribute(4)
-                        return (true)
+                        return true
                     }
                     // 検出できなかった場合は、全件削除
                 }
                 // データを全件削除
                 outputDebugLog("DELETE ALL DATA")
                 storageDao.deleteAll()
-                return (true)
+                return true
             }
             if ((lineData.contains("delete before"))&&(lineData.contains("confirm")))
             {
@@ -212,7 +212,7 @@ class IntentDataImporter(private val context: Context, val intent: Intent)
                     storageDao.deleteBeforeByYear(yearInt)
                     storageDao.deleteBeforeByMonth(yearInt, monthInt)
                 }
-                return (true)
+                return true
             }
             if (lineData.contains("delete after"))
             {
@@ -229,7 +229,7 @@ class IntentDataImporter(private val context: Context, val intent: Intent)
                     storageDao.deleteAfterByYear(yearInt)
                     storageDao.deleteAfterByMonth(yearInt, monthInt)
                 }
-                return (true)
+                return true
             }
             if (lineData.contains("delete month"))
             {
@@ -243,32 +243,32 @@ class IntentDataImporter(private val context: Context, val intent: Intent)
                     // 休日のみ削除
                     outputDebugLog("DELETE MONTH HOLIDAY DATA $monthInt")
                     storageDao.deleteMonthOnlyAttribute(monthInt, 1)
-                    return (true)
+                    return true
                 }
                 if (lineData.contains("only anniversary"))
                 {
                     // 記念日のみ削除
                     outputDebugLog("DELETE MONTH ANNIVERSARY DATA $monthInt")
                     storageDao.deleteMonthOnlyAttribute(monthInt, 2)
-                    return (true)
+                    return true
                 }
                 if (lineData.contains("only notify"))
                 {
                     // NOTIFYのみ削除
                     outputDebugLog("DELETE MONTH NOTIFY DATA $monthInt")
                     storageDao.deleteMonthOnlyAttribute(monthInt, 3)
-                    return (true)
+                    return true
                 }
                 if (lineData.contains("only event"))
                 {
                     // EVENTのみ削除
                     outputDebugLog("DELETE MONTH EVENT DATA $monthInt")
                     storageDao.deleteMonthOnlyAttribute(monthInt, 4)
-                    return (true)
+                    return true
                 }
                 outputDebugLog("DELETE MONTH $monthInt")
                 storageDao.deleteMonthOnly(monthInt)
-                return (true)
+                return true
             }
             if (lineData.contains("delete only"))
             {
@@ -284,23 +284,23 @@ class IntentDataImporter(private val context: Context, val intent: Intent)
                     outputDebugLog("DELETE ONLY $yearInt-$monthInt")
                     storageDao.deleteYearMonth(yearInt, monthInt)
                 }
-                return (true)
+                return true
             }
         }
         catch (e: Exception)
         {
             e.printStackTrace()
         }
-        return (false)
+        return false
     }
 
     private fun outputDebugLog(data: String)
     {
-        if (isDebugLog) { Log.v(TAG, data) }
+        if (IS_DEBUG_LOG) { Log.v(TAG, data) }
     }
     companion object
     {
         private val TAG = IntentDataImporter::class.java.simpleName
-        private const val isDebugLog = true
+        private const val IS_DEBUG_LOG = true
     }
 }

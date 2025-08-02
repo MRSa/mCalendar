@@ -26,24 +26,47 @@ class HolidayAnniversaryProvider : ViewModel()
 
     fun checkDate(calendar: Calendar) : DateModification
     {
+        var isHoliday = false
+        var isAnniversary = false
+        var isNotify = false
+        var isEvent = false
         for (dateInfo in dateList)
         {
             val month = calendar[Calendar.MONTH] + 1
             val date = calendar[Calendar.DATE]
             if ((dateInfo.month == month)&&(dateInfo.date == date))
             {
-                val info = when (dateInfo.attribute) {
-                    0 -> DateModification.NORMAL
-                    1 -> DateModification.HOLIDAY
-                    2 -> DateModification.ANNIVERSARY
-                    3 -> DateModification.NOTIFY
-                    4 -> DateModification.EVENT
-                    else -> DateModification.NORMAL
+                when (dateInfo.attribute) {
+                    0 -> { }
+                    1 -> { isHoliday = true }
+                    2 -> { isAnniversary = true }
+                    3 -> { isNotify = true }
+                    4 -> { isEvent = true }
+                    else -> { }
                 }
-                return (info)
             }
         }
-        return (DateModification.NORMAL)
+        // ----- Notify > Event > Anniversary > Holiday > Normal の順に判定
+        return (if (isNotify)
+        {
+            DateModification.NOTIFY
+        }
+        else if (isEvent)
+        {
+            DateModification.EVENT
+        }
+        else if (isAnniversary)
+        {
+            DateModification.ANNIVERSARY
+        }
+        else if (isHoliday)
+        {
+            DateModification.HOLIDAY
+        }
+        else
+        {
+            DateModification.NORMAL
+        })
     }
 
     fun update(calendar: Calendar)

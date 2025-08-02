@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.wear.compose.ui.tooling.preview.WearPreviewDevices
 import androidx.wear.protolayout.ActionBuilders
 import androidx.wear.protolayout.DeviceParametersBuilders
 import androidx.wear.protolayout.LayoutElementBuilders
@@ -46,7 +47,7 @@ class MyTimelineLayout
         {
             //  フォントスケールが大きい場合には、年-月の表示を省略して画面内に収めるよう調整する
             return (
-                    PrimaryLayout.Builder(deviceParameters)
+                    PrimaryLayout.Builder(deviceParameters).setResponsiveContentInsetEnabled(true)
                         .setPrimaryLabelTextContent(
                             // CONTENT
                             monthlyCalendarLayout.getMonthlyCalendarLayout(clickable = launchActivity, fontScale = fontScale)
@@ -56,7 +57,7 @@ class MyTimelineLayout
                     )
         }
         return (
-                PrimaryLayout.Builder(deviceParameters)
+                PrimaryLayout.Builder(deviceParameters).setResponsiveContentInsetEnabled(true)
                     .setPrimaryLabelTextContent(
                         // TITLE
                         monthlyCalendarLayout.getMonthlyCalendarTitleLayout(clickable = launchActivity)
@@ -78,6 +79,7 @@ class MyTimelineLayout
     showBackground = true
 )
 
+@WearPreviewDevices
 @Composable
 fun TilePreview()
 {
@@ -85,7 +87,7 @@ fun TilePreview()
     val clickable = ModifiersBuilders.Clickable.Builder().build()  // ダミー
     val fontScale = 1.0f  // ダミー
     val monthlyCalendarLayout = MonthlyCalendarElement(LocalContext.current)
-    val timeline = PrimaryLayout.Builder(deviceParameters)
+    val timeline = PrimaryLayout.Builder(deviceParameters).setResponsiveContentInsetEnabled(true)
         .setPrimaryLabelTextContent(
             // TITLE
             monthlyCalendarLayout.getMonthlyCalendarTitleLayout(clickable)

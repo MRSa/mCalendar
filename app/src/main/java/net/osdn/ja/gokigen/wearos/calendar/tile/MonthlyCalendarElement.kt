@@ -101,7 +101,7 @@ class MonthlyCalendarElement(private val context: Context)
         {
             // 今日が土曜日の場合は、変えない
             Log.v(TAG, " TODAY IS SATURDAY")
-            return (false)
+            return false
         }
         calendar.add(Calendar.DATE, lastDay)
         val saturdayMonth = calendar[Calendar.MONTH] + 1
@@ -133,6 +133,10 @@ class MonthlyCalendarElement(private val context: Context)
             // 記念日情報が登録されていた場合
             val month = calendar[Calendar.MONTH] + 1
             val date = calendar[Calendar.DATE]
+            var isHoliday = false
+            var isAnniversary = false
+            var isNotify = false
+            var isEvent = false
             for (dataContent in anniversaryList)
             {
                 if ((dataContent.month == month) && (dataContent.date == date))
@@ -141,20 +145,37 @@ class MonthlyCalendarElement(private val context: Context)
                     {
                         0 -> {} // Normal
                         1 -> {
-                            return 0xFFCF6679.toInt() // Holiday
+                            isHoliday = true
                         }
                         2 -> {
-                            return 0xFF03DAC5.toInt() // Anniversary
+                            isAnniversary = true
                         }
                         3 -> {
-                            return 0xFFFFC107.toInt() // Notify 0xFFEEFF41
+                            isNotify = true
                         }
                         4 -> {
-                            return 0xFFBB86FC.toInt() // Event
+                            isEvent = true
                         }
                         else -> {}  // Other
                     }
                 }
+            }
+            // --- 色の指定は、 Notify > Event > Anniversary > Holiday にする
+            if (isNotify)
+            {
+                return 0xFFFFC107.toInt() // Notify
+            }
+            if (isEvent)
+            {
+                return 0xFFBB86FC.toInt() // Event
+            }
+            if (isAnniversary)
+            {
+                return 0xFF03DAC5.toInt() // Anniversary
+            }
+            if (isHoliday)
+            {
+                return 0xFFCF6679.toInt() // Holiday
             }
         }
         catch (e: Exception)
@@ -179,7 +200,6 @@ class MonthlyCalendarElement(private val context: Context)
         val backColor = 0xFF000000.toInt()
         val row = LayoutElementBuilders.Row.Builder()
         row.setWidth(
-/**/
             DimensionBuilders.WrappedDimensionProp.Builder()
                 .setMinimumSize(
                     DimensionBuilders.DpProp.Builder(10.0f)
@@ -187,7 +207,6 @@ class MonthlyCalendarElement(private val context: Context)
                         .build()
                 )
                 .build()
-/**/
 /*
             DimensionBuilders.ExpandedDimensionProp.Builder()
                 .setLayoutWeight(
@@ -339,7 +358,6 @@ class MonthlyCalendarElement(private val context: Context)
     fun getMonthlyCalendarLayout(clickable: ModifiersBuilders.Clickable, fontScale: Float): LayoutElementBuilders.LayoutElement
     {
         val column = LayoutElementBuilders.Column.Builder()
-
 /*
         if (fontScale > 1.09f)
         {
@@ -389,7 +407,7 @@ class MonthlyCalendarElement(private val context: Context)
                     )
                     .build()
             )
-            for (dayOfWeek in 1..7) {
+            (1..7).forEach { dayOfWeek ->
                 var dayString = ""
                 var foregroundColor = getDayOfWeekColor(calendar)
                 var backgroundColor = backColor
