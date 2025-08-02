@@ -129,7 +129,7 @@ class MainActivity : ComponentActivity()
             }
         }
 
-        if (isDebugLog)
+        if (IS_DEBUG_LOG)
         {
             // 休日データのリストを確認 (デバッグ用)
             try
@@ -189,7 +189,7 @@ class MainActivity : ComponentActivity()
 
     private fun outputDebugLog(data: String)
     {
-        if (isDebugLog)
+        if (IS_DEBUG_LOG)
         {
             runOnUiThread {
                 Log.v(TAG, data)
@@ -205,6 +205,6 @@ class MainActivity : ComponentActivity()
             Manifest.permission.VIBRATE,
             Manifest.permission.WAKE_LOCK,
         )
-        private const val isDebugLog = true
+        private const val IS_DEBUG_LOG = true
     }
 }

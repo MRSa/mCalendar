@@ -89,7 +89,7 @@ fun MonthlyCalendar(initialYear: Int, initialMonth: Int, initialDate: Int, anniv
         val yearMonthSize = 16.sp
         val dateSize = 13.sp
         val horizontalPadding = 5.dp  // square: 5dp, round: 20dp
-        val showTitleYearMonth =  "%04d-%02d".format(year, month)
+        val showTitleYearMonth = "%04d-%02d".format(year, month)
 
         Scaffold(
             timeText = {
@@ -109,9 +109,6 @@ fun MonthlyCalendar(initialYear: Int, initialMonth: Int, initialDate: Int, anniv
                     indicatorHeight = 45.dp,
                     indicatorWidth = 5.dp,
                     paddingHorizontal = 5.dp,
-                    //showFadeInAnimation = false,
-                    //showFadeOutAnimation = false,
-                    //showPositionAnimation = true,
                 )
             },
             modifier = Modifier
