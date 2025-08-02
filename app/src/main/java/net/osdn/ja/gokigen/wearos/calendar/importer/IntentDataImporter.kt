@@ -296,11 +296,11 @@ class IntentDataImporter(private val context: Context, val intent: Intent)
 
     private fun outputDebugLog(data: String)
     {
-        if (isDebugLog) { Log.v(TAG, data) }
+        if (IS_DEBUG_LOG) { Log.v(TAG, data) }
     }
     companion object
     {
         private val TAG = IntentDataImporter::class.java.simpleName
-        private const val isDebugLog = true
+        private const val IS_DEBUG_LOG = true
     }
 }
