@@ -2,7 +2,7 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("com.google.devtools.ksp")
-    id("org.jetbrains.kotlin.plugin.compose") version "2.2.0"
+    id("org.jetbrains.kotlin.plugin.compose") version "2.2.20"
     id("androidx.room")
 }
 
@@ -14,8 +14,8 @@ android {
         applicationId = "net.osdn.ja.gokigen.wearos.calendar"
         minSdk = 26
         targetSdk = 36
-        versionCode = 100110
-        versionName = "1.1.10"
+        versionCode = 100111
+        versionName = "1.1.11"
         vectorDrawables {
             useSupportLibrary = true
         }
@@ -56,19 +56,19 @@ room {
 
 dependencies {
     implementation("androidx.core:core-splashscreen:1.0.1")
-    implementation("androidx.core:core-ktx:1.16.0")
+    implementation("androidx.core:core-ktx:1.17.0")
     implementation("androidx.recyclerview:recyclerview:1.4.0")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.9.2")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.9.4")
 
-    implementation("androidx.activity:activity-compose:1.10.1")
+    implementation("androidx.activity:activity-compose:1.11.0")
     //implementation("androidx.wear:wear-tooling-preview:1.0.0")
 
-    val composeVersion = "2025.07.00"
+    val composeVersion = "2025.09.01"
     implementation(platform("androidx.compose:compose-bom:$composeVersion"))
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.ui:ui-tooling-preview")
 
-    val wearComposeVersion = "1.4.1"
+    val wearComposeVersion = "1.5.2"
     implementation("androidx.wear.compose:compose-foundation:$wearComposeVersion")
     implementation("androidx.wear.compose:compose-material:$wearComposeVersion")
 
@@ -77,10 +77,10 @@ dependencies {
     implementation("androidx.wear.tiles:tiles-material:$tilesVersion")
     implementation("androidx.wear.tiles:tiles-tooling-preview:$tilesVersion")
 
-    implementation("com.google.android.horologist:horologist-compose-tools:0.6.23")
+    implementation("com.google.android.horologist:horologist-compose-tools:0.7.15")
     implementation("com.google.android.horologist:horologist-tiles:0.7.15")
 
-    val roomVersion = "2.7.2"
+    val roomVersion = "2.8.1"
     implementation("androidx.room:room-runtime:$roomVersion")
     ksp("androidx.room:room-compiler:$roomVersion")
 }
